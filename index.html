@@ -1,0 +1,221 @@
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dusun-English Catch Game</title>
+<style>
+  body {
+    margin: 0;
+    background: #a3d5ff;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+  }
+  canvas {
+    background: #dff6ff;
+    display: block;
+    margin: 0 auto;
+    border: 3px solid #333;
+  }
+  #score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+    display: none;
+  }
+  #startScreen {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    text-align: center;
+  }
+  #startButton {
+    margin-top: 20px;
+    padding: 15px 30px;
+    background: #4CAF50;
+    border: none;
+    color: white;
+    font-size: 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  #startButton:hover {
+    background: #45a049;
+  }
+</style>
+</head>
+<body>
+
+<!-- ✅ Score Display -->
+<div id="score">Score: 0</div>
+
+<!-- ✅ Start Screen -->
+<div id="startScreen">
+  <h1>🌟 Dusun-English Catch Game 🌟</h1>
+  <p>Catch the <strong>correct</strong> Dusun–English pairs!</p>
+  <p>Move with <b>←</b> and <b>→</b> arrow keys.</p>
+  <button id="startButton">▶ Play</button>
+</div>
+
+<canvas id="gameCanvas" width="500" height="600"></canvas>
+
+<!-- ✅ Sound Effects -->
+<audio id="correctSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-success-alert-2039.mp3"></audio>
+<audio id="wrongSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
+
+<script>
+// ===============================
+// ✅ Word List
+// ===============================
+const correctWords = [
+  { dusun: "Rangalau", english: "Rambutan" },
+  { dusun: "Walai", english: "House" },
+  { dusun: "Tungau", english: "Cat" },
+  { dusun: "Tasu", english: "Dog" },
+  { dusun: "Manuk", english: "Chicken" },
+  { dusun: "Puun", english: "Tree" },
+  { dusun: "Totuong", english: "Night" },
+  { dusun: "Waig", english: "Water" },
+  { dusun: "Olumis", english: "Beautiful" },
+  { dusun: "Opurak", english: "White" },
+  { dusun: "Kabang", english: "Mouth" },
+  { dusun: "Aragang", english: "Red" },
+  { dusun: "Otogod", english: "Angry" },
+  { dusun: "Buuk", english: "Book" },
+  { dusun: "Sikul", english: "School" },
+  { dusun: "Tambalut", english: "Friend" },
+  { dusun: "Takanon", english: "Food" },
+  { dusun: "Takano", english: "Rice" },
+  { dusun: "Sada", english: "Fish" },
+  { dusun: "Molohing", english: "Elder" }
+];
+
+const wrongWords = [
+  { dusun: "Mokita", english: "Car" },
+  { dusun: "Lopido", english: "Flower" },
+  { dusun: "Zangkut", english: "Chair" },
+  { dusun: "Kavilo", english: "Window" },
+  { dusun: "Pabanu", english: "Banana" },
+  { dusun: "Fongira", english: "Table" },
+  { dusun: "Mirugo", english: "Phone" },
+  { dusun: "Vasido", english: "Clock" },
+  { dusun: "Tibolo", english: "Door" },
+  { dusun: "Quzima", english: "Sky" }
+];
+
+const words = [
+  ...correctWords.map(w => ({ ...w, correct: true })),
+  ...wrongWords.map(w => ({ ...w, correct: false }))
+];
+
+// ===============================
+// Game Variables
+// ===============================
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let basket = { x: 200, y: 550, width: 100, height: 20 };
+let items = [];
+let score = 0;
+let gameStarted = false;
+
+const correctSound = document.getElementById("correctSound");
+const wrongSound = document.getElementById("wrongSound");
+
+function spawnItem() {
+  if (!gameStarted) return;
+  let w = words[Math.floor(Math.random() * words.length)];
+  items.push({
+    x: Math.random() * (canvas.width - 80),
+    y: -30,
+    word: w,
+    speed: 2 + Math.random() * 2
+  });
+}
+
+function drawBasket() {
+  ctx.fillStyle = "brown";
+  ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+}
+
+function drawItems() {
+  ctx.font = "18px Arial";
+  ctx.textAlign = "center";
+  items.forEach(item => {
+    ctx.fillStyle = "#333";
+    ctx.fillText(item.word.dusun + " (" + item.word.english + ")", item.x + 40, item.y);
+  });
+}
+
+function update() {
+  if (!gameStarted) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBasket();
+  drawItems();
+
+  items.forEach(item => {
+    item.y += item.speed;
+
+    if (
+      item.y + 20 > basket.y &&
+      item.x + 80 > basket.x &&
+      item.x < basket.x + basket.width
+    ) {
+      if (item.word.correct) {
+        score += 10;
+        correctSound.currentTime = 0;
+        correctSound.play();
+      } else {
+        score -= 5;
+        wrongSound.currentTime = 0;
+        wrongSound.play();
+      }
+      items.splice(items.indexOf(item), 1);
+      document.getElementById("score").textContent = "Score: " + score;
+    }
+  });
+
+  items = items.filter(i => i.y < canvas.height + 30);
+
+  requestAnimationFrame(update);
+}
+
+let keys = {};
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
+
+function moveBasket() {
+  if (gameStarted) {
+    if (keys["ArrowLeft"] && basket.x > 0) basket.x -= 5;
+    if (keys["ArrowRight"] && basket.x + basket.width < canvas.width) basket.x += 5;
+  }
+  requestAnimationFrame(moveBasket);
+}
+
+// ===============================
+// Start Game Button
+// ===============================
+document.getElementById("startButton").addEventListener("click", () => {
+  document.getElementById("startScreen").style.display = "none";
+  document.getElementById("score").style.display = "block";
+  gameStarted = true;
+  setInterval(spawnItem, 1500);
+  update();
+});
+
+moveBasket();
+</script>
+
+</body>
+</html>
