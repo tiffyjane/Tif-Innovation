@@ -1,218 +1,575 @@
-index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dusun-English Catch Game</title>
-<style>
-  body {
-    margin: 0;
-    background: #a3d5ff;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-  }
-  canvas {
-    background: #dff6ff;
-    display: block;
-    margin: 0 auto;
-    border: 3px solid #333;
-  }
-  #score {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #222;
-    display: none;
-  }
-  #startScreen {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-    text-align: center;
-  }
-  #startButton {
-    margin-top: 20px;
-    padding: 15px 30px;
-    background: #4CAF50;
-    border: none;
-    color: white;
-    font-size: 24px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  #startButton:hover {
-    background: #45a049;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dusun-English Word Catch Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #gameContainer {
+            position: relative;
+            width: 95%;
+            max-width: 800px;
+            height: 85vh;
+            background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 5px solid #2c3e50;
+        }
+        
+        #gameHeader {
+            background: rgba(44, 62, 80, 0.9);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        #score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f1c40f;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        #lives {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .life {
+            width: 30px;
+            height: 30px;
+            background: #e74c3c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+        
+        #instructions {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(44, 62, 80, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 10;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        #instructions h2 {
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        #instructions p {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+        
+        #startButton {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        
+        #startButton:hover {
+            background: #27ae60;
+        }
+        
+        #basket {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 60px;
+            background: linear-gradient(to bottom, #8b4513, #5a2e0e);
+            border: 3px solid #5a2e0e;
+            border-radius: 20px;
+            text-align: center;
+            line-height: 60px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+            transition: transform 0.1s;
+        }
+        
+        .word {
+            position: absolute;
+            font-size: 18px;
+            padding: 8px 15px;
+            border-radius: 10px;
+            border: 2px solid;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: transform 0.2s;
+            z-index: 2;
+        }
+        
+        .correct-word {
+            background: linear-gradient(to bottom, #2ecc71, #27ae60);
+            border-color: #27ae60;
+            color: white;
+        }
+        
+        .incorrect-word {
+            background: linear-gradient(to bottom, #e74c3c, #c0392b);
+            border-color: #c0392b;
+            color: white;
+        }
+        
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(44, 62, 80, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 10;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+        
+        #gameOver h2 {
+            color: #e74c3c;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        #finalScore {
+            font-size: 24px;
+            color: #f1c40f;
+            margin: 15px 0;
+        }
+        
+        #restartButton {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        
+        #restartButton:hover {
+            background: #2980b9;
+        }
+        
+        #levelIndicator {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: rgba(44, 62, 80, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .cloud-1 {
+            width: 120px;
+            height: 60px;
+            top: 20%;
+            left: 10%;
+        }
+        
+        .cloud-2 {
+            width: 150px;
+            height: 70px;
+            top: 40%;
+            right: 15%;
+        }
+        
+        .cloud-3 {
+            width: 100px;
+            height: 50px;
+            top: 60%;
+            left: 20%;
+        }
+        
+        @media (max-width: 600px) {
+            #gameContainer {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .word {
+                font-size: 16px;
+                padding: 6px 12px;
+            }
+            
+            #basket {
+                width: 100px;
+                height: 50px;
+                line-height: 50px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <h1>Dusun-English Word Catch Game</h1>
+    <p>Catch the correct Dusun translations while avoiding the incorrect ones!</p>
+    
+    <div id="gameContainer">
+        <div id="gameHeader">
+            <div id="score">Score: 0</div>
+            <div id="lives">
+                <div class="life">❤️</div>
+                <div class="life">❤️</div>
+                <div class="life">❤️</div>
+            </div>
+        </div>
+        
+        <div id="levelIndicator">Level: 1</div>
+        
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        
+        <div id="instructions">
+            <h2>How to Play</h2>
+            <p>Use the <strong>LEFT</strong> and <strong>RIGHT</strong> arrow keys to move the basket</p>
+            <p>Catch the <span style="color:#2ecc71">GREEN</span> words (correct translations) to earn points</p>
+            <p>Avoid the <span style="color:#e74c3c">RED</span> words (incorrect translations) to avoid losing points</p>
+            <p>You have 3 lives. Game ends when you lose all lives!</p>
+            <button id="startButton">Start Game</button>
+        </div>
+        
+        <div id="basket">BASKET</div>
+        
+        <div id="gameOver">
+            <h2>Game Over!</h2>
+            <p>You've run out of lives</p>
+            <div id="finalScore">Final Score: 0</div>
+            <button id="restartButton">Play Again</button>
+        </div>
+    </div>
 
-<!-- ✅ Score Display -->
-<div id="score">Score: 0</div>
+    <!-- Sounds -->
+    <audio id="correctSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+    <audio id="wrongSound" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg"></audio>
+    <audio id="gameOverSound" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
 
-<!-- ✅ Start Screen -->
-<div id="startScreen">
-  <h1>🌟 Dusun-English Catch Game 🌟</h1>
-  <p>Catch the <strong>correct</strong> Dusun–English pairs!</p>
-  <p>Move with <b>←</b> and <b>→</b> arrow keys.</p>
-  <button id="startButton">▶ Play</button>
-</div>
+    <script>
+        // Word Data
+        const words = [
+            {en:"Rambutan", du:"Rangalau", correct:true},
+            {en:"House", du:"Walai", correct:true},
+            {en:"Cat", du:"Tungau", correct:true},
+            {en:"Dog", du:"Tasu", correct:true},
+            {en:"Chicken", du:"Manuk", correct:true},
+            {en:"Tree", du:"Puun", correct:true},
+            {en:"Night", du:"Totuong", correct:true},
+            {en:"Water", du:"Waig", correct:true},
+            {en:"Beautiful", du:"Olumis", correct:true},
+            {en:"White", du:"Opurak", correct:true},
+            {en:"Mouth", du:"Kabang", correct:true},
+            {en:"Red", du:"Aragang", correct:true},
+            {en:"Angry", du:"Otogod", correct:true},
+            {en:"Book", du:"Buuk", correct:true},
+            {en:"School", du:"Sikul", correct:true},
+            {en:"Friend", du:"Tambalut", correct:true},
+            {en:"Food", du:"Takanon", correct:true},
+            {en:"Rice", du:"Takano", correct:true},
+            {en:"Fish", du:"Sada", correct:true},
+            {en:"Elder", du:"Molohing", correct:true},
 
-<canvas id="gameCanvas" width="500" height="600"></canvas>
+            // Incorrect words to confuse
+            {en:"Car", du:"Motuka", correct:false},
+            {en:"Phone", du:"Telefon", correct:false},
+            {en:"Sky", du:"Langit", correct:false},
+            {en:"Chair", du:"Kursi", correct:false},
+            {en:"Table", du:"Meja", correct:false},
+            {en:"Computer", du:"Kompi", correct:false},
+            {en:"Hat", du:"Topi", correct:false},
+            {en:"Rain", du:"Ujan", correct:false},
+            {en:"Butterfly", du:"Pupud", correct:false},
+            {en:"Sun", du:"Matahari", correct:false}
+        ];
 
-<!-- ✅ Sound Effects -->
-<audio id="correctSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-success-alert-2039.mp3"></audio>
-<audio id="wrongSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
+        // Game elements
+        const container = document.getElementById("gameContainer");
+        const basket = document.getElementById("basket");
+        const scoreDisplay = document.getElementById("score");
+        const livesDisplay = document.getElementById("lives");
+        const instructions = document.getElementById("instructions");
+        const startButton = document.getElementById("startButton");
+        const gameOverScreen = document.getElementById("gameOver");
+        const finalScoreDisplay = document.getElementById("finalScore");
+        const restartButton = document.getElementById("restartButton");
+        const levelIndicator = document.getElementById("levelIndicator");
+        
+        // Sounds
+        const correctSound = document.getElementById("correctSound");
+        const wrongSound = document.getElementById("wrongSound");
+        const gameOverSound = document.getElementById("gameOverSound");
 
-<script>
-// ===============================
-// ✅ Word List
-// ===============================
-const correctWords = [
-  { dusun: "Rangalau", english: "Rambutan" },
-  { dusun: "Walai", english: "House" },
-  { dusun: "Tungau", english: "Cat" },
-  { dusun: "Tasu", english: "Dog" },
-  { dusun: "Manuk", english: "Chicken" },
-  { dusun: "Puun", english: "Tree" },
-  { dusun: "Totuong", english: "Night" },
-  { dusun: "Waig", english: "Water" },
-  { dusun: "Olumis", english: "Beautiful" },
-  { dusun: "Opurak", english: "White" },
-  { dusun: "Kabang", english: "Mouth" },
-  { dusun: "Aragang", english: "Red" },
-  { dusun: "Otogod", english: "Angry" },
-  { dusun: "Buuk", english: "Book" },
-  { dusun: "Sikul", english: "School" },
-  { dusun: "Tambalut", english: "Friend" },
-  { dusun: "Takanon", english: "Food" },
-  { dusun: "Takano", english: "Rice" },
-  { dusun: "Sada", english: "Fish" },
-  { dusun: "Molohing", english: "Elder" }
-];
+        // Game variables
+        let score = 0;
+        let lives = 3;
+        let basketX = container.offsetWidth / 2 - 60;
+        let gameActive = false;
+        let wordInterval;
+        let fallSpeed = 3;
+        let level = 1;
+        let wordsCaught = 0;
+        const levelThreshold = 10; // Words needed to level up
 
-const wrongWords = [
-  { dusun: "Mokita", english: "Car" },
-  { dusun: "Lopido", english: "Flower" },
-  { dusun: "Zangkut", english: "Chair" },
-  { dusun: "Kavilo", english: "Window" },
-  { dusun: "Pabanu", english: "Banana" },
-  { dusun: "Fongira", english: "Table" },
-  { dusun: "Mirugo", english: "Phone" },
-  { dusun: "Vasido", english: "Clock" },
-  { dusun: "Tibolo", english: "Door" },
-  { dusun: "Quzima", english: "Sky" }
-];
+        // Move Basket with Arrow Keys
+        document.addEventListener("keydown", e => {
+            if (!gameActive) return;
+            
+            if (e.key === "ArrowLeft") basketX -= 40;
+            if (e.key === "ArrowRight") basketX += 40;
+            
+            // Keep basket within bounds
+            if (basketX < 0) basketX = 0;
+            if (basketX > container.offsetWidth - 120) basketX = container.offsetWidth - 120;
+            
+            basket.style.left = basketX + "px";
+        });
 
-const words = [
-  ...correctWords.map(w => ({ ...w, correct: true })),
-  ...wrongWords.map(w => ({ ...w, correct: false }))
-];
+        // Touch support for mobile devices
+        let touchStartX = 0;
+        let basketStartX = 0;
+        
+        basket.addEventListener('touchstart', function(e) {
+            if (!gameActive) return;
+            touchStartX = e.touches[0].clientX;
+            basketStartX = basketX;
+            e.preventDefault();
+        }, {passive: false});
+        
+        basket.addEventListener('touchmove', function(e) {
+            if (!gameActive) return;
+            const touchX = e.touches[0].clientX;
+            const diff = touchX - touchStartX;
+            basketX = basketStartX + diff;
+            
+            // Keep basket within bounds
+            if (basketX < 0) basketX = 0;
+            if (basketX > container.offsetWidth - 120) basketX = container.offsetWidth - 120;
+            
+            basket.style.left = basketX + "px";
+            e.preventDefault();
+        }, {passive: false});
 
-// ===============================
-// Game Variables
-// ===============================
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+        // Start game
+        startButton.addEventListener("click", startGame);
+        restartButton.addEventListener("click", startGame);
 
-let basket = { x: 200, y: 550, width: 100, height: 20 };
-let items = [];
-let score = 0;
-let gameStarted = false;
+        function startGame() {
+            // Reset game state
+            score = 0;
+            lives = 3;
+            level = 1;
+            wordsCaught = 0;
+            fallSpeed = 3;
+            
+            // Update UI
+            scoreDisplay.textContent = "Score: " + score;
+            livesDisplay.innerHTML = '<div class="life">❤️</div><div class="life">❤️</div><div class="life">❤️</div>';
+            levelIndicator.textContent = "Level: " + level;
+            
+            // Hide instructions and game over screen
+            instructions.style.display = "none";
+            gameOverScreen.style.display = "none";
+            
+            // Clear any existing words
+            const existingWords = document.querySelectorAll(".word");
+            existingWords.forEach(word => word.remove());
+            
+            // Position basket
+            basketX = container.offsetWidth / 2 - 60;
+            basket.style.left = basketX + "px";
+            
+            // Start game
+            gameActive = true;
+            
+            // Start dropping words
+            if (wordInterval) clearInterval(wordInterval);
+            wordInterval = setInterval(dropWord, 1500);
+        }
 
-const correctSound = document.getElementById("correctSound");
-const wrongSound = document.getElementById("wrongSound");
+        // Drop Words
+        function dropWord() {
+            if (!gameActive) return;
+            
+            const w = words[Math.floor(Math.random() * words.length)];
+            const el = document.createElement("div");
+            el.className = `word ${w.correct ? "correct-word" : "incorrect-word"}`;
+            el.textContent = `${w.en} - ${w.du}`;
+            el.dataset.correct = w.correct;
+            
+            // Random horizontal position
+            const maxLeft = container.offsetWidth - 150;
+            el.style.left = Math.random() * maxLeft + "px";
+            el.style.top = "-50px";
+            
+            container.appendChild(el);
 
-function spawnItem() {
-  if (!gameStarted) return;
-  let w = words[Math.floor(Math.random() * words.length)];
-  items.push({
-    x: Math.random() * (canvas.width - 80),
-    y: -30,
-    word: w,
-    speed: 2 + Math.random() * 2
-  });
-}
+            let y = -50;
+            const fall = setInterval(() => {
+                if (!gameActive) {
+                    clearInterval(fall);
+                    return;
+                }
+                
+                y += fallSpeed / 2; // Slower fall for better gameplay
+                el.style.top = y + "px";
 
-function drawBasket() {
-  ctx.fillStyle = "brown";
-  ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
-}
+                // Collision check
+                const basketRect = basket.getBoundingClientRect();
+                const wordRect = el.getBoundingClientRect();
+                
+                if (wordRect.bottom >= basketRect.top &&
+                   wordRect.left < basketRect.right &&
+                   wordRect.right > basketRect.left) {
+                    
+                    // Animate word being caught
+                    el.style.transform = "scale(0.8)";
+                    
+                    setTimeout(() => {
+                        if (el.dataset.correct === "true") {
+                            score += 5;
+                            correctSound.play();
+                            wordsCaught++;
+                            
+                            // Check for level up
+                            if (wordsCaught >= levelThreshold) {
+                                levelUp();
+                            }
+                        } else {
+                            score -= 3;
+                            lives--;
+                            updateLives();
+                            wrongSound.play();
+                            
+                            // Check for game over
+                            if (lives <= 0) {
+                                gameOver();
+                            }
+                        }
+                        
+                        scoreDisplay.textContent = "Score: " + score;
+                        el.remove();
+                    }, 100);
+                    
+                    clearInterval(fall);
+                }
 
-function drawItems() {
-  ctx.font = "18px Arial";
-  ctx.textAlign = "center";
-  items.forEach(item => {
-    ctx.fillStyle = "#333";
-    ctx.fillText(item.word.dusun + " (" + item.word.english + ")", item.x + 40, item.y);
-  });
-}
+                // Remove if missed
+                if (y > container.offsetHeight) {
+                    if (el.dataset.correct === "true") {
+                        // Lose a life for missing a correct word
+                        lives--;
+                        updateLives();
+                        
+                        if (lives <= 0) {
+                            gameOver();
+                        }
+                    }
+                    el.remove();
+                    clearInterval(fall);
+                }
+            }, 30);
+        }
 
-function update() {
-  if (!gameStarted) return;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawBasket();
-  drawItems();
+        function updateLives() {
+            const lifeHearts = livesDisplay.querySelectorAll(".life");
+            lifeHearts.forEach((heart, index) => {
+                if (index < lives) {
+                    heart.textContent = "❤️";
+                } else {
+                    heart.textContent = "💔";
+                }
+            });
+        }
 
-  items.forEach(item => {
-    item.y += item.speed;
+        function levelUp() {
+            level++;
+            wordsCaught = 0;
+            fallSpeed += 0.5; // Increase difficulty
+            levelIndicator.textContent = "Level: " + level;
+            
+            // Visual feedback for level up
+            container.style.animation = "none";
+            setTimeout(() => {
+                container.style.animation = "pulse 0.5s";
+            }, 10);
+        }
 
-    if (
-      item.y + 20 > basket.y &&
-      item.x + 80 > basket.x &&
-      item.x < basket.x + basket.width
-    ) {
-      if (item.word.correct) {
-        score += 10;
-        correctSound.currentTime = 0;
-        correctSound.play();
-      } else {
-        score -= 5;
-        wrongSound.currentTime = 0;
-        wrongSound.play();
-      }
-      items.splice(items.indexOf(item), 1);
-      document.getElementById("score").textContent = "Score: " + score;
-    }
-  });
+        function gameOver() {
+            gameActive = false;
+            clearInterval(wordInterval);
+            
+            finalScoreDisplay.textContent = "Final Score: " + score;
+            gameOverScreen.style.display = "block";
+            gameOverSound.play();
+        }
 
-  items = items.filter(i => i.y < canvas.height + 30);
-
-  requestAnimationFrame(update);
-}
-
-let keys = {};
-document.addEventListener("keydown", e => keys[e.key] = true);
-document.addEventListener("keyup", e => keys[e.key] = false);
-
-function moveBasket() {
-  if (gameStarted) {
-    if (keys["ArrowLeft"] && basket.x > 0) basket.x -= 5;
-    if (keys["ArrowRight"] && basket.x + basket.width < canvas.width) basket.x += 5;
-  }
-  requestAnimationFrame(moveBasket);
-}
-
-// ===============================
-// Start Game Button
-// ===============================
-document.getElementById("startButton").addEventListener("click", () => {
-  document.getElementById("startScreen").style.display = "none";
-  document.getElementById("score").style.display = "block";
-  gameStarted = true;
-  setInterval(spawnItem, 1500);
-  update();
-});
+        // Add CSS animation for level up
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+                70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
 
 moveBasket();
 </script>
