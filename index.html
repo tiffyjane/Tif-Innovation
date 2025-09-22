@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dusun-English Word Catch Game</title>
+    <title>Dusun Word Adventure - Catch the Right Words!</title>
     <style>
         * {
             margin: 0;
@@ -12,60 +12,89 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: white;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #333;
             overflow: hidden;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 10px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
+            animation: bounce 2s infinite;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #ff6b6b;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #5d5dff;
         }
         
         #gameContainer {
             position: relative;
             width: 95%;
             max-width: 800px;
-            height: 85vh;
-            background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            height: 75vh;
+            background: linear-gradient(to bottom, #a1c4fd 0%, #c2e9fb 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
-            border: 5px solid #2c3e50;
+            border: 8px solid #ff9a76;
         }
         
         #gameHeader {
-            background: rgba(44, 62, 80, 0.9);
+            background: rgba(255, 107, 107, 0.9);
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid #3498db;
+            border-bottom: 5px solid #ff6b6b;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            position: relative;
         }
         
         #score {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
-            color: #f1c40f;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            color: #fff;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+            background: #5d5dff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 3px 0px #3a3ac7;
         }
         
         #lives {
             display: flex;
-            gap: 5px;
+            gap: 8px;
         }
         
         .life {
-            width: 30px;
-            height: 30px;
-            background: #e74c3c;
+            width: 40px;
+            height: 40px;
+            background: #ffdd59;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            color: white;
+            font-size: 24px;
+            color: #ff6b6b;
+            box-shadow: 0 3px 0px #ffa801;
+            border: 3px solid #ffa801;
+            animation: pulse 1.5s infinite;
         }
         
         #instructions {
@@ -73,40 +102,59 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(44, 62, 80, 0.95);
-            padding: 20px;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 20px;
             text-align: center;
-            z-index: 10;
-            width: 80%;
+            z-index: 20;
+            width: 85%;
             max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 5px solid #ff9a76;
         }
         
         #instructions h2 {
-            color: #3498db;
+            color: #ff6b6b;
             margin-bottom: 15px;
+            font-size: 28px;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
         }
         
         #instructions p {
-            margin: 10px 0;
+            margin: 12px 0;
             line-height: 1.5;
+            font-size: 18px;
+        }
+        
+        .key {
+            display: inline-block;
+            background: #5d5dff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            margin: 0 5px;
+            box-shadow: 0 3px 0px #3a3ac7;
         }
         
         #startButton {
-            background: #2ecc71;
-            color: white;
+            background: #ffdd59;
+            color: #ff6b6b;
             border: none;
-            padding: 10px 20px;
-            font-size: 18px;
-            border-radius: 5px;
+            padding: 12px 25px;
+            font-size: 22px;
+            border-radius: 50px;
             cursor: pointer;
-            margin-top: 15px;
-            transition: background 0.3s;
+            margin-top: 20px;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 5px 0px #ffa801;
+            border: 3px solid #ffa801;
+            font-family: 'Comic Sans MS', cursive;
         }
         
         #startButton:hover {
-            background: #27ae60;
+            transform: translateY(3px);
+            box-shadow: 0 2px 0px #ffa801;
         }
         
         #basket {
@@ -114,43 +162,59 @@
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 60px;
-            background: linear-gradient(to bottom, #8b4513, #5a2e0e);
-            border: 3px solid #5a2e0e;
-            border-radius: 20px;
+            width: 140px;
+            height: 80px;
+            background: #ff9a76;
+            border: 5px solid #ff6b6b;
+            border-radius: 20px 20px 0 0;
             text-align: center;
-            line-height: 60px;
+            line-height: 80px;
             font-weight: bold;
             color: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 0px #ff7c4d;
             z-index: 5;
             transition: transform 0.1s;
+            font-size: 20px;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+        }
+        
+        #basket::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: -5px;
+            width: 150px;
+            height: 15px;
+            background: #ff7c4d;
+            border-radius: 0 0 10px 10px;
         }
         
         .word {
             position: absolute;
-            font-size: 18px;
-            padding: 8px 15px;
-            border-radius: 10px;
-            border: 2px solid;
+            font-size: 20px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            border: 3px solid;
             font-weight: bold;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 0px rgba(0, 0, 0, 0.2);
             text-align: center;
             transition: transform 0.2s;
             z-index: 2;
+            animation: float 3s infinite ease-in-out;
         }
         
         .correct-word {
-            background: linear-gradient(to bottom, #2ecc71, #27ae60);
-            border-color: #27ae60;
+            background: linear-gradient(to bottom, #7bed9f, #2ed573);
+            border-color: #2ed573;
             color: white;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
         }
         
         .incorrect-word {
-            background: linear-gradient(to bottom, #e74c3c, #c0392b);
-            border-color: #c0392b;
+            background: linear-gradient(to bottom, #ff6b6b, #ee5a52);
+            border-color: #ee5a52;
             color: white;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
         }
         
         #gameOver {
@@ -158,108 +222,236 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(44, 62, 80, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 20px;
             text-align: center;
-            z-index: 10;
-            width: 80%;
+            z-index: 20;
+            width: 85%;
             max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 5px solid #ff9a76;
             display: none;
         }
         
         #gameOver h2 {
-            color: #e74c3c;
-            font-size: 32px;
+            color: #ff6b6b;
+            font-size: 36px;
             margin-bottom: 15px;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
         }
         
         #finalScore {
-            font-size: 24px;
-            color: #f1c40f;
+            font-size: 28px;
+            color: #5d5dff;
             margin: 15px 0;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
         }
         
         #restartButton {
-            background: #3498db;
-            color: white;
+            background: #ffdd59;
+            color: #ff6b6b;
             border: none;
-            padding: 10px 20px;
-            font-size: 18px;
-            border-radius: 5px;
+            padding: 12px 25px;
+            font-size: 22px;
+            border-radius: 50px;
             cursor: pointer;
             margin-top: 15px;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 5px 0px #ffa801;
+            border: 3px solid #ffa801;
+            font-family: 'Comic Sans MS', cursive;
         }
         
         #restartButton:hover {
-            background: #2980b9;
+            transform: translateY(3px);
+            box-shadow: 0 2px 0px #ffa801;
         }
         
         #levelIndicator {
             position: absolute;
-            top: 70px;
+            top: 80px;
             right: 20px;
-            background: rgba(44, 62, 80, 0.8);
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 16px;
+            background: #5d5dff;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 3px 0px #3a3ac7;
+            z-index: 5;
         }
         
         .cloud {
             position: absolute;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50px;
             z-index: 1;
+            animation: floatCloud 20s infinite linear;
         }
         
         .cloud-1 {
             width: 120px;
             height: 60px;
-            top: 20%;
-            left: 10%;
+            top: 15%;
+            left: -100px;
+            animation-duration: 25s;
         }
         
         .cloud-2 {
             width: 150px;
             height: 70px;
-            top: 40%;
-            right: 15%;
+            top: 30%;
+            right: -150px;
+            animation-duration: 30s;
         }
         
         .cloud-3 {
             width: 100px;
             height: 50px;
-            top: 60%;
-            left: 20%;
+            top: 50%;
+            left: -100px;
+            animation-duration: 35s;
+        }
+        
+        .sun {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            width: 80px;
+            height: 80px;
+            background: #ffdd59;
+            border-radius: 50%;
+            box-shadow: 0 0 30px #ffdd59;
+            z-index: 1;
+            animation: sunGlow 3s infinite alternate;
+        }
+        
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+            background: #7bed9f;
+            border-top: 5px solid #2ed573;
+            z-index: 3;
+        }
+        
+        .bush {
+            position: absolute;
+            bottom: 30px;
+            width: 60px;
+            height: 40px;
+            background: #2ed573;
+            border-radius: 50%;
+            z-index: 2;
+        }
+        
+        .bush-1 {
+            left: 10%;
+        }
+        
+        .bush-2 {
+            left: 30%;
+        }
+        
+        .bush-3 {
+            right: 20%;
+        }
+        
+        .bush-4 {
+            right: 5%;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes floatCloud {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 200px)); }
+        }
+        
+        @keyframes sunGlow {
+            0% { box-shadow: 0 0 30px #ffdd59; }
+            100% { box-shadow: 0 0 50px #ffdd59, 0 0 70px #ff9a76; }
         }
         
         @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
             #gameContainer {
                 width: 100%;
-                height: 100vh;
-                border-radius: 0;
+                height: 70vh;
             }
             
             .word {
                 font-size: 16px;
-                padding: 6px 12px;
+                padding: 8px 12px;
             }
             
             #basket {
-                width: 100px;
-                height: 50px;
-                line-height: 50px;
+                width: 120px;
+                height: 70px;
+                line-height: 70px;
+            }
+            
+            #score {
+                font-size: 22px;
             }
         }
+        
+        .music-control {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid #ff9a76;
+        }
+        
+        .music-control i {
+            font-size: 20px;
+            color: #ff6b6b;
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <h1>Dusun-English Word Catch Game</h1>
-    <p>Catch the correct Dusun translations while avoiding the incorrect ones!</p>
+    <div class="header">
+        <h1>Dusun Word Adventure</h1>
+        <p>Catch the correct translations while avoiding the wrong ones!</p>
+    </div>
     
     <div id="gameContainer">
+        <div class="sun"></div>
+        
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        
         <div id="gameHeader">
             <div id="score">Score: 0</div>
             <div id="lives">
@@ -271,17 +463,20 @@
         
         <div id="levelIndicator">Level: 1</div>
         
-        <div class="cloud cloud-1"></div>
-        <div class="cloud cloud-2"></div>
-        <div class="cloud cloud-3"></div>
+        <div class="bush bush-1"></div>
+        <div class="bush bush-2"></div>
+        <div class="bush bush-3"></div>
+        <div class="bush bush-4"></div>
+        
+        <div class="ground"></div>
         
         <div id="instructions">
             <h2>How to Play</h2>
-            <p>Use the <strong>LEFT</strong> and <strong>RIGHT</strong> arrow keys to move the basket</p>
-            <p>Catch the <span style="color:#2ecc71">GREEN</span> words (correct translations) to earn points</p>
-            <p>Avoid the <span style="color:#e74c3c">RED</span> words (incorrect translations) to avoid losing points</p>
+            <p>Use the <span class="key">←</span> and <span class="key">→</span> arrow keys to move the basket</p>
+            <p>Catch the <span style="color:#2ed573">GREEN</span> words (correct translations) to earn points</p>
+            <p>Avoid the <span style="color:#ff6b6b">RED</span> words (incorrect translations) to avoid losing points</p>
             <p>You have 3 lives. Game ends when you lose all lives!</p>
-            <button id="startButton">Start Game</button>
+            <button id="startButton">Start Game!</button>
         </div>
         
         <div id="basket">BASKET</div>
@@ -290,14 +485,20 @@
             <h2>Game Over!</h2>
             <p>You've run out of lives</p>
             <div id="finalScore">Final Score: 0</div>
-            <button id="restartButton">Play Again</button>
+            <button id="restartButton">Play Again!</button>
+        </div>
+        
+        <div class="music-control" id="musicToggle">
+            <i class="fas fa-volume-up"></i>
         </div>
     </div>
 
     <!-- Sounds -->
-    <audio id="correctSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-    <audio id="wrongSound" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg"></audio>
-    <audio id="gameOverSound" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
+    <audio id="correctSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
+    <audio id="wrongSound" src="https://assets.mixkit.co/sfx/preview/mixkit-funny-cartoon-jump-465.mp3"></audio>
+    <audio id="gameOverSound" src="https://assets.mixkit.co/sfx/preview/mixkit-sad-game-over-trombone-471.mp3"></audio>
+    <audio id="levelUpSound" src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3"></audio>
+    <audio id="backgroundMusic" loop src="https://assets.mixkit.co/music/preview/mixkit-happy-day-583.mp3"></audio>
 
     <script>
         // Word Data
@@ -347,22 +548,27 @@
         const finalScoreDisplay = document.getElementById("finalScore");
         const restartButton = document.getElementById("restartButton");
         const levelIndicator = document.getElementById("levelIndicator");
+        const musicToggle = document.getElementById("musicToggle");
+        const musicIcon = musicToggle.querySelector("i");
         
         // Sounds
         const correctSound = document.getElementById("correctSound");
         const wrongSound = document.getElementById("wrongSound");
         const gameOverSound = document.getElementById("gameOverSound");
+        const levelUpSound = document.getElementById("levelUpSound");
+        const backgroundMusic = document.getElementById("backgroundMusic");
 
         // Game variables
         let score = 0;
         let lives = 3;
-        let basketX = container.offsetWidth / 2 - 60;
+        let basketX = container.offsetWidth / 2 - 70;
         let gameActive = false;
         let wordInterval;
         let fallSpeed = 3;
         let level = 1;
         let wordsCaught = 0;
         const levelThreshold = 10; // Words needed to level up
+        let musicOn = true;
 
         // Move Basket with Arrow Keys
         document.addEventListener("keydown", e => {
@@ -372,10 +578,16 @@
             if (e.key === "ArrowRight") basketX += 40;
             
             // Keep basket within bounds
-            if (basketX < 0) basketX = 0;
-            if (basketX > container.offsetWidth - 120) basketX = container.offsetWidth - 120;
+            if (basketX < 10) basketX = 10;
+            if (basketX > container.offsetWidth - 150) basketX = container.offsetWidth - 150;
             
             basket.style.left = basketX + "px";
+            
+            // Add bounce animation
+            basket.style.transform = `translateX(-50%) scale(1.05)`;
+            setTimeout(() => {
+                basket.style.transform = `translateX(-50%) scale(1)`;
+            }, 100);
         });
 
         // Touch support for mobile devices
@@ -396,12 +608,25 @@
             basketX = basketStartX + diff;
             
             // Keep basket within bounds
-            if (basketX < 0) basketX = 0;
-            if (basketX > container.offsetWidth - 120) basketX = container.offsetWidth - 120;
+            if (basketX < 10) basketX = 10;
+            if (basketX > container.offsetWidth - 150) basketX = container.offsetWidth - 150;
             
             basket.style.left = basketX + "px";
             e.preventDefault();
         }, {passive: false});
+
+        // Music toggle
+        musicToggle.addEventListener("click", function() {
+            if (musicOn) {
+                backgroundMusic.pause();
+                musicIcon.className = "fas fa-volume-mute";
+                musicOn = false;
+            } else {
+                backgroundMusic.play();
+                musicIcon.className = "fas fa-volume-up";
+                musicOn = true;
+            }
+        });
 
         // Start game
         startButton.addEventListener("click", startGame);
@@ -429,11 +654,17 @@
             existingWords.forEach(word => word.remove());
             
             // Position basket
-            basketX = container.offsetWidth / 2 - 60;
+            basketX = container.offsetWidth / 2 - 70;
             basket.style.left = basketX + "px";
             
             // Start game
             gameActive = true;
+            
+            // Start background music
+            if (musicOn) {
+                backgroundMusic.currentTime = 0;
+                backgroundMusic.play();
+            }
             
             // Start dropping words
             if (wordInterval) clearInterval(wordInterval);
@@ -476,7 +707,7 @@
                    wordRect.right > basketRect.left) {
                     
                     // Animate word being caught
-                    el.style.transform = "scale(0.8)";
+                    el.style.transform = "scale(1.2)";
                     
                     setTimeout(() => {
                         if (el.dataset.correct === "true") {
@@ -529,8 +760,10 @@
             lifeHearts.forEach((heart, index) => {
                 if (index < lives) {
                     heart.textContent = "❤️";
+                    heart.style.animation = "pulse 1.5s infinite";
                 } else {
                     heart.textContent = "💔";
+                    heart.style.animation = "none";
                 }
             });
         }
@@ -540,39 +773,35 @@
             wordsCaught = 0;
             fallSpeed += 0.5; // Increase difficulty
             levelIndicator.textContent = "Level: " + level;
+            levelUpSound.play();
             
             // Visual feedback for level up
-            container.style.animation = "none";
+            container.style.boxShadow = "0 0 30px #ffdd59";
             setTimeout(() => {
-                container.style.animation = "pulse 0.5s";
-            }, 10);
+                container.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.2)";
+            }, 1000);
         }
 
         function gameOver() {
             gameActive = false;
             clearInterval(wordInterval);
+            backgroundMusic.pause();
             
             finalScoreDisplay.textContent = "Final Score: " + score;
             gameOverScreen.style.display = "block";
             gameOverSound.play();
         }
 
-        // Add CSS animation for level up
+        // Add floating animation to words
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes pulse {
-                0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
-                70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
-                100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+            @keyframes float {
+                0%, 100% { transform: translateY(0) rotate(0deg); }
+                25% { transform: translateY(-5px) rotate(1deg); }
+                75% { transform: translateY(-3px) rotate(-1deg); }
             }
         `;
         document.head.appendChild(style);
     </script>
-</body>
-</html>
-
-moveBasket();
-</script>
-
 </body>
 </html>
