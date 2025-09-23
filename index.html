@@ -240,6 +240,15 @@
             filter: drop-shadow(0 5px 3px rgba(0,0,0,0.2));
         }
         
+        .catch-effect {
+            position: absolute;
+            font-size: 40px;
+            font-weight: bold;
+            z-index: 10;
+            animation: catchEffect 1s forwards;
+            pointer-events: none;
+        }
+        
         #gameOver {
             position: absolute;
             top: 50%;
@@ -679,6 +688,11 @@
             75% { transform: translateY(-5px) scale(1.05); }
         }
         
+        @keyframes catchEffect {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
+        }
+        
         @keyframes floatCloud {
             0% { transform: translateX(0); }
             100% { transform: translateX(calc(100vw + 300px)); }
@@ -1045,6 +1059,24 @@
             backgroundMusic.load();
         }
 
+        // Create catch effect
+        function createCatchEffect(text, color, x, y) {
+            const effect = document.createElement("div");
+            effect.className = "catch-effect";
+            effect.textContent = text;
+            effect.style.color = color;
+            effect.style.left = x + "px";
+            effect.style.top = y + "px";
+            effect.style.textShadow = `2px 2px 0 rgba(0,0,0,0.3)`;
+            
+            container.appendChild(effect);
+            
+            // Remove effect after animation
+            setTimeout(() => {
+                effect.remove();
+            }, 1000);
+        }
+
         // Move Basket with Arrow Keys
         document.addEventListener("keydown", e => {
             if (!gameActive) return;
@@ -1052,9 +1084,12 @@
             if (e.key === "ArrowLeft") basketX -= 40;
             if (e.key === "ArrowRight") basketX += 40;
             
-            // Keep basket within bounds
+            // Keep basket within bounds - fixed boundary calculation
+            const basketWidth = 160;
             if (basketX < 10) basketX = 10;
-            if (basketX > container.offsetWidth - 170) basketX = container.offsetWidth - 170;
+            if (basketX > container.offsetWidth - basketWidth - 10) {
+                basketX = container.offsetWidth - basketWidth - 10;
+            }
             
             basket.style.left = basketX + "px";
             
@@ -1082,9 +1117,12 @@
             const diff = touchX - touchStartX;
             basketX = basketStartX + diff;
             
-            // Keep basket within bounds
+            // Keep basket within bounds - fixed boundary calculation
+            const basketWidth = 160;
             if (basketX < 10) basketX = 10;
-            if (basketX > container.offsetWidth - 170) basketX = container.offsetWidth - 170;
+            if (basketX > container.offsetWidth - basketWidth - 10) {
+                basketX = container.offsetWidth - basketWidth - 10;
+            }
             
             basket.style.left = basketX + "px";
             e.preventDefault();
@@ -1121,7 +1159,7 @@
             // Clear distractions
             clearInterval(distractionInterval);
             clearInterval(heartInterval);
-            const existingDistractions = document.querySelectorAll(".distraction, .heart");
+            const existingDistractions = document.querySelectorAll(".distraction, .heart, .catch-effect");
             existingDistractions.forEach(d => d.remove());
             rainEffect.style.display = "none";
             rainSound.pause();
@@ -1240,9 +1278,14 @@
                     // Animate word being caught
                     el.style.transform = "scale(1.2)";
                     
+                    // Create catch effect
+                    const effectX = basketRect.left + (basketRect.width / 2);
+                    const effectY = basketRect.top - 30;
+                    
                     setTimeout(() => {
                         if (el.dataset.correct === "true") {
                             score += 5;
+                            createCatchEffect("+5", "#4caf50", effectX, effectY);
                             correctSound.currentTime = 0;
                             correctSound.play().catch(e => console.log("Audio play failed:", e));
                             wordsCaught++;
@@ -1254,6 +1297,7 @@
                         } else {
                             score -= 3;
                             lives--;
+                            createCatchEffect("-3", "#f44336", effectX, effectY);
                             updateLives();
                             wrongSound.currentTime = 0;
                             wrongSound.play().catch(e => console.log("Audio play failed:", e));
@@ -1342,6 +1386,11 @@
                     
                     // Animate heart being caught
                     heart.style.transform = "scale(1.5)";
+                    
+                    // Create catch effect for heart
+                    const effectX = basketRect.left + (basketRect.width / 2);
+                    const effectY = basketRect.top - 30;
+                    createCatchEffect("+1 Life", "#ff4081", effectX, effectY);
                     
                     setTimeout(() => {
                         lives++;
