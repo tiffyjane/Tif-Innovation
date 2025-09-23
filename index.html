@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dusun Word Adventure - Catch the Right Words!</title>
+    <title>Dusun Word Adventure</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
         
@@ -749,8 +749,8 @@
         
         .music-control {
             position: absolute;
-            bottom: 15px;
-            right: 15px;
+            top: 15px;
+            left: 15px;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 50%;
             width: 50px;
@@ -789,6 +789,10 @@
         @media (max-width: 600px) {
             .header h1 {
                 font-size: 2.2rem;
+            }
+            
+            .header p {
+                font-size: 1.1rem;
             }
             
             #gameContainer {
@@ -833,6 +837,17 @@
             #instructions p {
                 font-size: 16px;
             }
+            
+            .music-control {
+                top: 10px;
+                left: 10px;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .music-control i {
+                font-size: 20px;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -840,7 +855,7 @@
 <body>
     <div class="header">
         <h1>Dusun Word Adventure</h1>
-        <p>Catch the correct translations while avoiding the wrong ones!</p>
+        <p>Catch correct translations to earn points!</p>
     </div>
     
     <div id="gameContainer">
@@ -877,14 +892,11 @@
         
         <div id="instructions">
             <h2>How to Play</h2>
-            <p>Use the <span class="key">←</span> and <span class="key">→</span> arrow keys to move the basket</p>
-            <p>Catch the correct Dusun translations to earn points</p>
-            <p>Avoid the incorrect translations to avoid losing points</p>
-            <p>Catch <span style="color:#f44336">❤️ hearts</span> to gain extra lives!</p>
-            <p>Words fall faster as you level up!</p>
-            <p>Watch out for distractions starting at Level 3!</p>
+            <p>Use <span class="key">←</span> and <span class="key">→</span> to move the basket</p>
+            <p>Catch correct translations for points</p>
+            <p>Avoid wrong ones to keep points</p>
+            <p>Catch <span style="color:#f44336">❤️ hearts</span> for extra lives!</p>
             <p>Reach Level 5 to win!</p>
-            <p>You have 5 lives. Game ends when you lose all lives!</p>
             <button id="startButton">Start Game!</button>
         </div>
         
@@ -920,7 +932,7 @@
     <audio id="gameOverSound" src="https://assets.mixkit.co/sfx/preview/mixkit-sad-game-over-trombone-471.mp3"></audio>
     <audio id="levelUpSound" src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3"></audio>
     <audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
-    <audio id="monsterSound" src="https://assets.mixkit.co/sfx/preview/mixkit-monster-growl-1-295.mp3"></audio>
+    <audio id="monsterSound" src="https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-463.mp3"></audio>
     <audio id="rainSound" src="https://assets.mixkit.co/sfx/preview/mixkit-rain-loop-2401.mp3"></audio>
     <audio id="heartSound" src="https://assets.mixkit.co/sfx/preview/mixkit-extra-bonus-in-a-video-game-2045.mp3"></audio>
     <audio id="backgroundMusic" loop src="https://assets.mixkit.co/music/preview/mixkit-happy-day-583.mp3"></audio>
@@ -1008,6 +1020,31 @@
         let distractionsActive = false;
         let activeWords = []; // Track positions of active words
 
+        // Initialize audio elements
+        function initializeAudio() {
+            // Set volume levels
+            correctSound.volume = 0.7;
+            wrongSound.volume = 0.7;
+            gameOverSound.volume = 0.7;
+            levelUpSound.volume = 0.7;
+            winSound.volume = 0.7;
+            monsterSound.volume = 0.5;
+            rainSound.volume = 0.3;
+            heartSound.volume = 0.7;
+            backgroundMusic.volume = 0.4;
+            
+            // Preload sounds
+            correctSound.load();
+            wrongSound.load();
+            gameOverSound.load();
+            levelUpSound.load();
+            winSound.load();
+            monsterSound.load();
+            rainSound.load();
+            heartSound.load();
+            backgroundMusic.load();
+        }
+
         // Move Basket with Arrow Keys
         document.addEventListener("keydown", e => {
             if (!gameActive) return;
@@ -1060,7 +1097,7 @@
                 musicIcon.className = "fas fa-volume-mute";
                 musicOn = false;
             } else {
-                backgroundMusic.play();
+                backgroundMusic.play().catch(e => console.log("Audio play failed:", e));
                 musicIcon.className = "fas fa-volume-up";
                 musicOn = true;
             }
@@ -1115,7 +1152,7 @@
             // Start background music
             if (musicOn) {
                 backgroundMusic.currentTime = 0;
-                backgroundMusic.play();
+                backgroundMusic.play().catch(e => console.log("Audio play failed:", e));
             }
             
             // Start dropping words
@@ -1206,7 +1243,8 @@
                     setTimeout(() => {
                         if (el.dataset.correct === "true") {
                             score += 5;
-                            correctSound.play();
+                            correctSound.currentTime = 0;
+                            correctSound.play().catch(e => console.log("Audio play failed:", e));
                             wordsCaught++;
                             
                             // Check for level up
@@ -1217,7 +1255,8 @@
                             score -= 3;
                             lives--;
                             updateLives();
-                            wrongSound.play();
+                            wrongSound.currentTime = 0;
+                            wrongSound.play().catch(e => console.log("Audio play failed:", e));
                             
                             // Check for game over
                             if (lives <= 0) {
@@ -1308,7 +1347,8 @@
                         lives++;
                         if (lives > 10) lives = 10; // Cap at 10 lives
                         updateLives();
-                        heartSound.play();
+                        heartSound.currentTime = 0;
+                        heartSound.play().catch(e => console.log("Audio play failed:", e));
                         heart.remove();
                     }, 100);
                     
@@ -1359,7 +1399,8 @@
             level++;
             wordsCaught = 0;
             levelIndicator.textContent = "Level: " + level;
-            levelUpSound.play();
+            levelUpSound.currentTime = 0;
+            levelUpSound.play().catch(e => console.log("Audio play failed:", e));
             
             // Update speed indicator based on level
             if (level <= 3) {
@@ -1452,13 +1493,14 @@
             
             // Play monster sound
             monsterSound.currentTime = 0;
-            monsterSound.play();
+            monsterSound.play().catch(e => console.log("Audio play failed:", e));
         }
 
         function createRain() {
             // Show rain effect
             rainEffect.style.display = "block";
-            rainSound.play();
+            rainSound.currentTime = 0;
+            rainSound.play().catch(e => console.log("Audio play failed:", e));
             
             // Screen shake effect
             container.classList.add("screen-shake");
@@ -1477,7 +1519,8 @@
             clearInterval(heartInterval);
             clearInterval(distractionInterval);
             backgroundMusic.pause();
-            winSound.play();
+            winSound.currentTime = 0;
+            winSound.play().catch(e => console.log("Audio play failed:", e));
             
             // Create confetti
             createConfetti();
@@ -1513,22 +1556,17 @@
             clearInterval(heartInterval);
             clearInterval(distractionInterval);
             backgroundMusic.pause();
+            gameOverSound.currentTime = 0;
+            gameOverSound.play().catch(e => console.log("Audio play failed:", e));
             
             finalScoreDisplay.textContent = "Final Score: " + score;
             gameOverScreen.style.display = "block";
-            gameOverSound.play();
         }
 
-        // Add floating animation to words
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes float {
-                0%, 100% { transform: translateY(0) rotate(0deg); }
-                25% { transform: translateY(-8px) rotate(2deg); }
-                75% { transform: translateY(-4px) rotate(-2deg); }
-            }
-        `;
-        document.head.appendChild(style);
+        // Initialize the game when page loads
+        window.addEventListener('load', function() {
+            initializeAudio();
+        });
     </script>
 </body>
 </html>
