@@ -598,6 +598,17 @@
             box-shadow: 0 3px 0px #ee5a52;
             z-index: 5;
         }
+        
+        /* Basket top indicator for debugging */
+        .basket-top {
+            position: absolute;
+            top: -5px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 0, 0, 0.5);
+            display: none; /* Hidden by default */
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -647,7 +658,9 @@
         
         <div id="basket">
             <div class="basket-handle"></div>
-            <div class="basket-body"></div>
+            <div class="basket-body">
+                <div class="basket-top"></div> <!-- Top of basket indicator -->
+            </div>
         </div>
         
         <div id="gameOver">
@@ -903,13 +916,24 @@
                 y += fallSpeed / 2;
                 el.style.top = y + "px";
 
-                // Collision check
+                // Get basket position
                 const basketRect = basket.getBoundingClientRect();
                 const wordRect = el.getBoundingClientRect();
                 
-                if (wordRect.bottom >= basketRect.top &&
-                   wordRect.left < basketRect.right &&
-                   wordRect.right > basketRect.left) {
+                // Calculate the top of the basket (not the entire basket)
+                const basketTop = basketRect.top;
+                const basketBottom = basketRect.bottom;
+                const basketHeight = basketRect.height;
+                
+                // Only count as caught if the word touches the top 30% of the basket
+                const catchZoneTop = basketTop;
+                const catchZoneBottom = basketTop + (basketHeight * 0.3);
+                
+                // Check if word is within the catch zone
+                if (wordRect.bottom >= catchZoneTop && 
+                    wordRect.top <= catchZoneBottom &&
+                    wordRect.left < basketRect.right &&
+                    wordRect.right > basketRect.left) {
                     
                     // Animate word being caught
                     el.style.transform = "scale(1.2)";
@@ -943,7 +967,7 @@
                     clearInterval(fall);
                 }
 
-                // Remove if missed
+                // Remove if missed (hit the ground)
                 if (y > container.offsetHeight) {
                     if (el.dataset.correct === "true") {
                         // Lose a life for missing a correct word
