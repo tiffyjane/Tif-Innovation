@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dusun Word Adventure - Catch the Right Words!</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,8 +14,8 @@
         }
         
         body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            font-family: 'Fredoka One', cursive;
+            background: linear-gradient(135deg, #6ecbf5 0%, #059ee3 100%);
             color: #333;
             overflow: hidden;
             height: 100vh;
@@ -27,19 +29,27 @@
         .header {
             text-align: center;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
+            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
             animation: bounce 2s infinite;
+            z-index: 100;
+            position: relative;
         }
         
         .header h1 {
-            font-size: 2.5rem;
-            color: #ff6b6b;
+            font-size: 2.8rem;
+            color: #ffeb3b;
             margin-bottom: 5px;
+            text-shadow: 3px 3px 0 #ff5722, 5px 5px 0 rgba(0,0,0,0.2);
+            background: linear-gradient(to bottom, #ff9800, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
         }
         
         .header p {
-            font-size: 1.2rem;
-            color: #5d5dff;
+            font-size: 1.3rem;
+            color: white;
+            text-shadow: 2px 2px 0 #1976d2;
         }
         
         #gameContainer {
@@ -47,53 +57,55 @@
             width: 95%;
             max-width: 800px;
             height: 75vh;
-            background: linear-gradient(to bottom, #a1c4fd 0%, #c2e9fb 100%);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(to bottom, #4fc3f7 0%, #29b6f6 100%);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
             overflow: hidden;
-            border: 8px solid #ff9a76;
+            border: 10px solid #ff9800;
+            z-index: 10;
         }
         
         #gameHeader {
-            background: rgba(255, 107, 107, 0.9);
-            padding: 10px 20px;
+            background: linear-gradient(to right, #ff5722, #ff9800);
+            padding: 12px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 5px solid #ff6b6b;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            z-index: 10;
+            border-bottom: 5px solid #e64a19;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 20;
             position: relative;
         }
         
         #score {
             font-size: 28px;
             font-weight: bold;
-            color: #fff;
+            color: white;
             text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
-            background: #5d5dff;
-            padding: 5px 15px;
-            border-radius: 20px;
-            box-shadow: 0 3px 0px #3a3ac7;
+            background: linear-gradient(to bottom, #2196f3, #1976d2);
+            padding: 8px 18px;
+            border-radius: 50px;
+            box-shadow: 0 5px 0px #1565c0;
+            border: 3px solid #bbdefb;
         }
         
         #lives {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
         
         .life {
-            width: 40px;
-            height: 40px;
-            background: #ffdd59;
+            width: 45px;
+            height: 45px;
+            background: #ffeb3b;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            color: #ff6b6b;
-            box-shadow: 0 3px 0px #ffa801;
-            border: 3px solid #ffa801;
+            font-size: 26px;
+            color: #f44336;
+            box-shadow: 0 4px 0px #ff9800;
+            border: 3px solid #ff9800;
             animation: pulse 1.5s infinite;
         }
         
@@ -103,58 +115,62 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(255, 255, 255, 0.95);
-            padding: 25px;
-            border-radius: 20px;
+            padding: 30px;
+            border-radius: 25px;
             text-align: center;
-            z-index: 20;
+            z-index: 100;
             width: 85%;
             max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            border: 5px solid #ff9a76;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border: 5px solid #ff9800;
+            font-family: 'Fredoka One', cursive;
         }
         
         #instructions h2 {
-            color: #ff6b6b;
-            margin-bottom: 15px;
-            font-size: 28px;
-            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
+            color: #ff5722;
+            margin-bottom: 20px;
+            font-size: 32px;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
         }
         
         #instructions p {
-            margin: 12px 0;
-            line-height: 1.5;
-            font-size: 18px;
+            margin: 15px 0;
+            line-height: 1.6;
+            font-size: 20px;
+            color: #333;
         }
         
         .key {
             display: inline-block;
-            background: #5d5dff;
+            background: #2196f3;
             color: white;
-            padding: 5px 10px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
             margin: 0 5px;
-            box-shadow: 0 3px 0px #3a3ac7;
+            box-shadow: 0 4px 0px #1976d2;
+            font-size: 18px;
         }
         
         #startButton {
-            background: #ffdd59;
-            color: #ff6b6b;
+            background: linear-gradient(to bottom, #ffeb3b, #ffc107);
+            color: #ff5722;
             border: none;
-            padding: 12px 25px;
-            font-size: 22px;
+            padding: 15px 30px;
+            font-size: 24px;
             border-radius: 50px;
             cursor: pointer;
             margin-top: 20px;
             transition: all 0.3s;
             font-weight: bold;
-            box-shadow: 0 5px 0px #ffa801;
-            border: 3px solid #ffa801;
-            font-family: 'Comic Sans MS', cursive;
+            box-shadow: 0 6px 0px #ff9800;
+            border: 4px solid #ff9800;
+            font-family: 'Fredoka One', cursive;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
         }
         
         #startButton:hover {
             transform: translateY(3px);
-            box-shadow: 0 2px 0px #ffa801;
+            box-shadow: 0 3px 0px #ff9800;
         }
         
         #basket {
@@ -162,10 +178,11 @@
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 140px;
-            height: 80px;
-            z-index: 5;
+            width: 160px;
+            height: 90px;
+            z-index: 15;
             transition: transform 0.1s;
+            filter: drop-shadow(0 10px 5px rgba(0,0,0,0.3));
         }
         
         .basket-body {
@@ -173,52 +190,54 @@
             bottom: 0;
             width: 100%;
             height: 70px;
-            background: #d2691e;
-            border: 5px solid #8b4513;
-            border-radius: 10px 10px 0 0;
+            background: #8d6e63;
+            border: 5px solid #6d4c41;
+            border-radius: 15px 15px 0 0;
             background-image: 
-                linear-gradient(90deg, transparent 10%, rgba(255,255,255,0.2) 10%, rgba(255,255,255,0.2) 20%, transparent 20%),
-                linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.2) 30%, rgba(255,255,255,0.2) 40%, transparent 40%),
-                linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 60%, transparent 60%),
-                linear-gradient(90deg, transparent 70%, rgba(255,255,255,0.2) 70%, rgba(255,255,255,0.2) 80%, transparent 80%);
-            box-shadow: 0 10px 0px #8b4513, inset 0 0 10px rgba(0,0,0,0.2);
+                linear-gradient(90deg, transparent 10%, rgba(255,255,255,0.3) 10%, rgba(255,255,255,0.3) 20%, transparent 20%),
+                linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.3) 40%, transparent 40%),
+                linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.3) 60%, transparent 60%),
+                linear-gradient(90deg, transparent 70%, rgba(255,255,255,0.3) 70%, rgba(255,255,255,0.3) 80%, transparent 80%);
+            box-shadow: 0 10px 0px #5d4037, inset 0 0 15px rgba(0,0,0,0.3);
         }
         
         .basket-handle {
             position: absolute;
-            top: -15px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 30px;
-            border: 8px solid #8b4513;
+            width: 130px;
+            height: 35px;
+            border: 8px solid #6d4c41;
             border-bottom: none;
-            border-radius: 60px 60px 0 0;
+            border-radius: 65px 65px 0 0;
             z-index: -1;
         }
         
         .word {
             position: absolute;
-            font-size: 20px;
-            padding: 10px 15px;
-            border-radius: 15px;
-            border: 3px solid #5d5dff;
+            font-size: 22px;
+            padding: 12px 18px;
+            border-radius: 20px;
+            border: 4px solid #2196f3;
             font-weight: bold;
-            box-shadow: 0 5px 0px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 0px rgba(0, 0, 0, 0.2);
             text-align: center;
             transition: transform 0.2s;
-            z-index: 2;
+            z-index: 5;
             animation: float 3s infinite ease-in-out;
-            background: linear-gradient(to bottom, #ffdd59, #ffa801);
-            color: #5d5dff;
-            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(to bottom, #ffeb3b, #ffc107);
+            color: #2196f3;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
+            font-family: 'Fredoka One', cursive;
         }
         
         .heart {
             position: absolute;
-            font-size: 30px;
-            z-index: 2;
-            animation: float 3s infinite ease-in-out;
+            font-size: 36px;
+            z-index: 5;
+            animation: heartFloat 3s infinite ease-in-out;
+            filter: drop-shadow(0 5px 3px rgba(0,0,0,0.2));
         }
         
         #gameOver {
@@ -227,64 +246,67 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
+            padding: 35px;
+            border-radius: 25px;
             text-align: center;
-            z-index: 20;
+            z-index: 100;
             width: 85%;
             max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            border: 5px solid #ff9a76;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border: 5px solid #ff9800;
             display: none;
+            font-family: 'Fredoka One', cursive;
         }
         
         #gameOver h2 {
-            color: #ff6b6b;
-            font-size: 36px;
-            margin-bottom: 15px;
-            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
+            color: #f44336;
+            font-size: 38px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
         }
         
         #finalScore {
-            font-size: 28px;
-            color: #5d5dff;
-            margin: 15px 0;
+            font-size: 30px;
+            color: #2196f3;
+            margin: 20px 0;
             text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
         }
         
         #restartButton {
-            background: #ffdd59;
-            color: #ff6b6b;
+            background: linear-gradient(to bottom, #ffeb3b, #ffc107);
+            color: #ff5722;
             border: none;
-            padding: 12px 25px;
-            font-size: 22px;
+            padding: 15px 30px;
+            font-size: 24px;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 20px;
             transition: all 0.3s;
             font-weight: bold;
-            box-shadow: 0 5px 0px #ffa801;
-            border: 3px solid #ffa801;
-            font-family: 'Comic Sans MS', cursive;
+            box-shadow: 0 6px 0px #ff9800;
+            border: 4px solid #ff9800;
+            font-family: 'Fredoka One', cursive;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
         }
         
         #restartButton:hover {
             transform: translateY(3px);
-            box-shadow: 0 2px 0px #ffa801;
+            box-shadow: 0 3px 0px #ff9800;
         }
         
         #levelIndicator {
             position: absolute;
-            top: 80px;
-            right: 20px;
-            background: #5d5dff;
+            top: 90px;
+            right: 25px;
+            background: linear-gradient(to bottom, #ff5722, #e64a19);
             color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 18px;
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-size: 20px;
             font-weight: bold;
-            box-shadow: 0 3px 0px #3a3ac7;
-            z-index: 5;
+            box-shadow: 0 4px 0px #bf360c;
+            z-index: 15;
+            border: 3px solid #ffccbc;
         }
         
         #winScreen {
@@ -293,156 +315,254 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
+            padding: 35px;
+            border-radius: 25px;
             text-align: center;
-            z-index: 20;
+            z-index: 100;
             width: 85%;
             max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            border: 5px solid #ff9a76;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border: 5px solid #4caf50;
             display: none;
+            font-family: 'Fredoka One', cursive;
         }
         
         #winScreen h2 {
-            color: #2ed573;
-            font-size: 36px;
-            margin-bottom: 15px;
-            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
+            color: #4caf50;
+            font-size: 38px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
         }
         
         #marksCollected {
-            font-size: 28px;
-            color: #5d5dff;
-            margin: 15px 0;
+            font-size: 30px;
+            color: #2196f3;
+            margin: 20px 0;
             text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
         }
         
         #playAgainButton {
-            background: #ffdd59;
-            color: #ff6b6b;
+            background: linear-gradient(to bottom, #ffeb3b, #ffc107);
+            color: #ff5722;
             border: none;
-            padding: 12px 25px;
-            font-size: 22px;
+            padding: 15px 30px;
+            font-size: 24px;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 20px;
             transition: all 0.3s;
             font-weight: bold;
-            box-shadow: 0 5px 0px #ffa801;
-            border: 3px solid #ffa801;
-            font-family: 'Comic Sans MS', cursive;
+            box-shadow: 0 6px 0px #ff9800;
+            border: 4px solid #ff9800;
+            font-family: 'Fredoka One', cursive;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
         }
         
         #playAgainButton:hover {
             transform: translateY(3px);
-            box-shadow: 0 2px 0px #ffa801;
+            box-shadow: 0 3px 0px #ff9800;
         }
         
         .cloud {
             position: absolute;
-            background: rgba(255, 255, 255, 0.9);
+            background: white;
             border-radius: 50px;
-            z-index: 1;
-            animation: floatCloud 20s infinite linear;
+            z-index: 2;
+            animation: floatCloud 40s infinite linear;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            opacity: 0.9;
+        }
+        
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
         }
         
         .cloud-1 {
-            width: 120px;
-            height: 60px;
+            width: 140px;
+            height: 70px;
             top: 15%;
-            left: -100px;
-            animation-duration: 25s;
+            left: -150px;
+            animation-duration: 45s;
+        }
+        
+        .cloud-1::before {
+            width: 60px;
+            height: 60px;
+            top: -20px;
+            left: 20px;
+        }
+        
+        .cloud-1::after {
+            width: 80px;
+            height: 80px;
+            top: -30px;
+            right: 20px;
         }
         
         .cloud-2 {
-            width: 150px;
-            height: 70px;
+            width: 170px;
+            height: 80px;
             top: 30%;
-            right: -150px;
-            animation-duration: 30s;
+            right: -180px;
+            animation-duration: 50s;
+        }
+        
+        .cloud-2::before {
+            width: 70px;
+            height: 70px;
+            top: -25px;
+            left: 15px;
+        }
+        
+        .cloud-2::after {
+            width: 90px;
+            height: 90px;
+            top: -35px;
+            right: 15px;
         }
         
         .cloud-3 {
-            width: 100px;
-            height: 50px;
+            width: 120px;
+            height: 60px;
             top: 50%;
-            left: -100px;
-            animation-duration: 35s;
+            left: -130px;
+            animation-duration: 55s;
+        }
+        
+        .cloud-3::before {
+            width: 50px;
+            height: 50px;
+            top: -15px;
+            left: 15px;
+        }
+        
+        .cloud-3::after {
+            width: 70px;
+            height: 70px;
+            top: -25px;
+            right: 15px;
         }
         
         .sun {
             position: absolute;
-            top: 20px;
-            left: 30px;
-            width: 80px;
-            height: 80px;
-            background: #ffdd59;
+            top: 25px;
+            left: 35px;
+            width: 90px;
+            height: 90px;
+            background: #ffeb3b;
             border-radius: 50%;
-            box-shadow: 0 0 30px #ffdd59;
-            z-index: 1;
-            animation: sunGlow 3s infinite alternate;
+            box-shadow: 0 0 40px #ffc107, 0 0 80px #ff9800;
+            z-index: 3;
+            animation: sunRotate 20s infinite linear;
+        }
+        
+        .sun::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: #ffc107;
+            border-radius: 50%;
+            animation: sunPulse 3s infinite alternate;
         }
         
         .ground {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 30px;
-            background: #7bed9f;
-            border-top: 5px solid #2ed573;
-            z-index: 3;
+            height: 40px;
+            background: linear-gradient(to top, #7cb342, #8bc34a);
+            border-top: 5px solid #689f38;
+            z-index: 8;
         }
         
         .bush {
             position: absolute;
-            bottom: 30px;
-            width: 60px;
-            height: 40px;
-            background: #2ed573;
-            border-radius: 50%;
-            z-index: 2;
+            bottom: 40px;
+            z-index: 7;
+            animation: bushSway 5s infinite ease-in-out;
         }
         
         .bush-1 {
             left: 10%;
+            width: 70px;
+            height: 50px;
+            background: #388e3c;
+            border-radius: 50%;
+            box-shadow: 
+                10px 0 0 #2e7d32,
+                -10px 0 0 #2e7d32,
+                0 -10px 0 #2e7d32;
         }
         
         .bush-2 {
             left: 30%;
+            width: 80px;
+            height: 60px;
+            background: #388e3c;
+            border-radius: 50%;
+            box-shadow: 
+                15px 0 0 #2e7d32,
+                -15px 0 0 #2e7d32,
+                0 -15px 0 #2e7d32;
         }
         
         .bush-3 {
             right: 20%;
+            width: 70px;
+            height: 50px;
+            background: #388e3c;
+            border-radius: 50%;
+            box-shadow: 
+                10px 0 0 #2e7d32,
+                -10px 0 0 #2e7d32,
+                0 -10px 0 #2e7d32;
         }
         
         .bush-4 {
             right: 5%;
+            width: 60px;
+            height: 45px;
+            background: #388e3c;
+            border-radius: 50%;
+            box-shadow: 
+                8px 0 0 #2e7d32,
+                -8px 0 0 #2e7d32,
+                0 -8px 0 #2e7d32;
         }
         
         .distraction {
             position: absolute;
-            z-index: 4;
+            z-index: 6;
             pointer-events: none;
         }
         
         .monster {
-            width: 80px;
-            height: 80px;
-            background: #ff6b6b;
+            width: 90px;
+            height: 90px;
+            background: #f44336;
             border-radius: 50%;
             position: absolute;
-            animation: monsterFloat 3s infinite ease-in-out;
+            animation: monsterFloat 4s infinite ease-in-out;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            border: 4px solid #d32f2f;
         }
         
         .monster::before, .monster::after {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 20px;
+            width: 25px;
+            height: 25px;
             background: white;
             border-radius: 50%;
-            top: 20px;
+            top: 25px;
+            animation: monsterBlink 3s infinite;
         }
         
         .monster::before {
@@ -455,13 +575,14 @@
         
         .monster-mouth {
             position: absolute;
-            width: 40px;
-            height: 20px;
+            width: 50px;
+            height: 25px;
             background: white;
-            border-radius: 0 0 20px 20px;
-            bottom: 15px;
+            border-radius: 0 0 25px 25px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
+            animation: monsterTalk 1s infinite alternate;
         }
         
         .rain {
@@ -471,13 +592,13 @@
             background: repeating-linear-gradient(
                 0deg,
                 transparent,
-                transparent 20px,
-                rgba(255, 255, 255, 0.3) 20px,
-                rgba(255, 255, 255, 0.3) 21px
+                transparent 25px,
+                rgba(255, 255, 255, 0.4) 25px,
+                rgba(255, 255, 255, 0.4) 26px
             );
-            animation: rainFall 0.5s linear infinite;
+            animation: rainFall 0.4s linear infinite;
             pointer-events: none;
-            z-index: 6;
+            z-index: 9;
             display: none;
         }
         
@@ -487,17 +608,58 @@
         
         .confetti {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #ff6b6b;
+            width: 12px;
+            height: 12px;
+            background: #ff5722;
             border-radius: 50%;
             animation: confettiFall 5s linear forwards;
-            z-index: 7;
+            z-index: 10;
+        }
+        
+        .bird {
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            z-index: 4;
+            animation: birdFly 15s linear infinite;
+        }
+        
+        .bird::before, .bird::after {
+            content: '';
+            position: absolute;
+            background: #ff9800;
+        }
+        
+        .bird::before {
+            width: 30px;
+            height: 20px;
+            border-radius: 50%;
+            top: 0;
+            left: 0;
+        }
+        
+        .bird::after {
+            width: 15px;
+            height: 10px;
+            border-radius: 50%;
+            top: 5px;
+            right: -5px;
+        }
+        
+        .bird-wing {
+            position: absolute;
+            width: 20px;
+            height: 10px;
+            background: #ff5722;
+            border-radius: 50%;
+            top: 10px;
+            left: 15px;
+            animation: birdFlap 0.5s infinite alternate;
         }
         
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-15px); }
         }
         
         @keyframes pulse {
@@ -506,24 +668,51 @@
         }
         
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(2deg); }
+            75% { transform: translateY(-4px) rotate(-2deg); }
+        }
+        
+        @keyframes heartFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            25% { transform: translateY(-10px) scale(1.1); }
+            75% { transform: translateY(-5px) scale(1.05); }
         }
         
         @keyframes floatCloud {
             0% { transform: translateX(0); }
-            100% { transform: translateX(calc(100vw + 200px)); }
+            100% { transform: translateX(calc(100vw + 300px)); }
         }
         
-        @keyframes sunGlow {
-            0% { box-shadow: 0 0 30px #ffdd59; }
-            100% { box-shadow: 0 0 50px #ffdd59, 0 0 70px #ff9a76; }
+        @keyframes sunRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes sunPulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
+        
+        @keyframes bushSway {
+            0%, 100% { transform: translateX(0) skew(0deg); }
+            50% { transform: translateX(5px) skew(2deg); }
         }
         
         @keyframes monsterFloat {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-10px) rotate(5deg); }
-            75% { transform: translateY(5px) rotate(-5deg); }
+            25% { transform: translateY(-15px) rotate(5deg); }
+            75% { transform: translateY(10px) rotate(-5deg); }
+        }
+        
+        @keyframes monsterBlink {
+            0%, 90%, 100% { height: 25px; }
+            95% { height: 5px; }
+        }
+        
+        @keyframes monsterTalk {
+            0% { height: 25px; }
+            100% { height: 15px; }
         }
         
         @keyframes rainFall {
@@ -542,77 +731,108 @@
             100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
         
+        @keyframes birdFly {
+            0% { transform: translateX(-100px) translateY(0); }
+            50% { transform: translateX(50vw) translateY(-20px); }
+            100% { transform: translateX(100vw) translateY(0); }
+        }
+        
+        @keyframes birdFlap {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-5px); }
+        }
+        
         @keyframes heartBeat {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.2); }
         }
         
+        .music-control {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 3px solid #ff9800;
+            animation: pulse 2s infinite;
+        }
+        
+        .music-control i {
+            font-size: 24px;
+            color: #ff5722;
+        }
+        
+        .speed-indicator {
+            position: absolute;
+            top: 90px;
+            left: 25px;
+            background: linear-gradient(to bottom, #4caf50, #388e3c);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 0px #2e7d32;
+            z-index: 15;
+            border: 3px solid #c8e6c9;
+        }
+        
+        /* Mobile responsiveness */
         @media (max-width: 600px) {
             .header h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             #gameContainer {
                 width: 100%;
                 height: 70vh;
+                border-radius: 15px;
             }
             
             .word {
-                font-size: 16px;
-                padding: 8px 12px;
+                font-size: 18px;
+                padding: 10px 15px;
             }
             
             .heart {
-                font-size: 24px;
+                font-size: 30px;
             }
             
             #basket {
-                width: 120px;
-            }
-            
-            .basket-body {
-                height: 60px;
+                width: 140px;
             }
             
             #score {
                 font-size: 22px;
+                padding: 6px 12px;
             }
-        }
-        
-        .music-control {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            border: 2px solid #ff9a76;
-        }
-        
-        .music-control i {
-            font-size: 20px;
-            color: #ff6b6b;
-        }
-        
-        .speed-indicator {
-            position: absolute;
-            top: 80px;
-            left: 20px;
-            background: #ff6b6b;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 3px 0px #ee5a52;
-            z-index: 5;
+            
+            .life {
+                width: 35px;
+                height: 35px;
+                font-size: 20px;
+            }
+            
+            #instructions, #gameOver, #winScreen {
+                padding: 20px;
+                width: 90%;
+            }
+            
+            #instructions h2, #gameOver h2, #winScreen h2 {
+                font-size: 26px;
+            }
+            
+            #instructions p {
+                font-size: 16px;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -629,6 +849,10 @@
         <div class="cloud cloud-1"></div>
         <div class="cloud cloud-2"></div>
         <div class="cloud cloud-3"></div>
+        
+        <div class="bird">
+            <div class="bird-wing"></div>
+        </div>
         
         <div id="gameHeader">
             <div id="score">Score: 0</div>
@@ -656,7 +880,7 @@
             <p>Use the <span class="key">←</span> and <span class="key">→</span> arrow keys to move the basket</p>
             <p>Catch the correct Dusun translations to earn points</p>
             <p>Avoid the incorrect translations to avoid losing points</p>
-            <p>Catch <span style="color:#ff6b6b">❤️ hearts</span> to gain extra lives!</p>
+            <p>Catch <span style="color:#f44336">❤️ hearts</span> to gain extra lives!</p>
             <p>Words fall faster as you level up!</p>
             <p>Watch out for distractions starting at Level 3!</p>
             <p>Reach Level 5 to win!</p>
@@ -771,7 +995,7 @@
         // Game variables
         let score = 0;
         let lives = 5;
-        let basketX = container.offsetWidth / 2 - 70;
+        let basketX = container.offsetWidth / 2 - 80;
         let gameActive = false;
         let wordInterval;
         let heartInterval;
@@ -793,7 +1017,7 @@
             
             // Keep basket within bounds
             if (basketX < 10) basketX = 10;
-            if (basketX > container.offsetWidth - 150) basketX = container.offsetWidth - 150;
+            if (basketX > container.offsetWidth - 170) basketX = container.offsetWidth - 170;
             
             basket.style.left = basketX + "px";
             
@@ -823,7 +1047,7 @@
             
             // Keep basket within bounds
             if (basketX < 10) basketX = 10;
-            if (basketX > container.offsetWidth - 150) basketX = container.offsetWidth - 150;
+            if (basketX > container.offsetWidth - 170) basketX = container.offsetWidth - 170;
             
             basket.style.left = basketX + "px";
             e.preventDefault();
@@ -868,7 +1092,7 @@
             
             // Update UI
             scoreDisplay.textContent = "Score: " + score;
-            livesDisplay.innerHTML = '<div class="life">❤️</div><div class="life">❤️</div><div class="life">❤️</div><div class="life">❤️</div><div class="life">❤️</div>';
+            updateLives();
             levelIndicator.textContent = "Level: " + level;
             speedIndicator.textContent = "Speed: Normal";
             
@@ -882,7 +1106,7 @@
             existingWords.forEach(word => word.remove());
             
             // Position basket
-            basketX = container.offsetWidth / 2 - 70;
+            basketX = container.offsetWidth / 2 - 80;
             basket.style.left = basketX + "px";
             
             // Start game
@@ -901,6 +1125,9 @@
             // Start dropping hearts
             if (heartInterval) clearInterval(heartInterval);
             heartInterval = setInterval(dropHeart, 8000); // Drop a heart every 8 seconds
+            
+            // Create a flying bird
+            createBird();
         }
 
         // Check if a position is too close to existing words
@@ -961,7 +1188,6 @@
                 
                 // Calculate the top of the basket (not the entire basket)
                 const basketTop = basketRect.top;
-                const basketBottom = basketRect.bottom;
                 const basketHeight = basketRect.height;
                 
                 // Only count as caught if the word touches the top 40% of the basket (easier)
@@ -1044,7 +1270,7 @@
             const heart = document.createElement("div");
             heart.className = "heart";
             heart.innerHTML = "❤️";
-            heart.style.animation = "heartBeat 1s infinite";
+            heart.style.animation = "heartBeat 1s infinite, heartFloat 3s infinite";
             
             // Random horizontal position
             const maxLeft = container.offsetWidth - 50;
@@ -1107,6 +1333,28 @@
             }
         }
 
+        function createBird() {
+            const bird = document.createElement("div");
+            bird.className = "bird";
+            
+            const wing = document.createElement("div");
+            wing.className = "bird-wing";
+            bird.appendChild(wing);
+            
+            // Random vertical position
+            const topPos = Math.random() * 50 + 10;
+            bird.style.top = topPos + "%";
+            
+            container.appendChild(bird);
+            
+            // Remove bird after animation completes
+            setTimeout(() => {
+                if (bird.parentNode) {
+                    bird.remove();
+                }
+            }, 15000);
+        }
+
         function levelUp() {
             level++;
             wordsCaught = 0;
@@ -1135,10 +1383,13 @@
             }
             
             // Visual feedback for level up
-            container.style.boxShadow = "0 0 30px #ffdd59";
+            container.style.boxShadow = "0 0 40px #ffeb3b";
             setTimeout(() => {
-                container.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.2)";
+                container.style.boxShadow = "0 15px 35px rgba(0, 0, 0, 0.3)";
             }, 1000);
+            
+            // Create a new bird
+            createBird();
         }
 
         function startDistractions() {
@@ -1176,13 +1427,13 @@
             monster.appendChild(mouth);
             
             // Position monster randomly at the top
-            monster.style.left = Math.random() * (container.offsetWidth - 80) + "px";
-            monster.style.top = "-80px";
+            monster.style.left = Math.random() * (container.offsetWidth - 90) + "px";
+            monster.style.top = "-90px";
             
             container.appendChild(monster);
             
             // Animate monster falling
-            let y = -80;
+            let y = -90;
             const monsterFall = setInterval(() => {
                 if (!gameActive) {
                     clearInterval(monsterFall);
@@ -1252,7 +1503,7 @@
         }
 
         function getRandomColor() {
-            const colors = ["#ff6b6b", "#5d5dff", "#ffdd59", "#2ed573", "#ff9a76"];
+            const colors = ["#ff5722", "#2196f3", "#ffeb3b", "#4caf50", "#9c27b0"];
             return colors[Math.floor(Math.random() * colors.length)];
         }
 
@@ -1273,8 +1524,8 @@
         style.textContent = `
             @keyframes float {
                 0%, 100% { transform: translateY(0) rotate(0deg); }
-                25% { transform: translateY(-5px) rotate(1deg); }
-                75% { transform: translateY(-3px) rotate(-1deg); }
+                25% { transform: translateY(-8px) rotate(2deg); }
+                75% { transform: translateY(-4px) rotate(-2deg); }
             }
         `;
         document.head.appendChild(style);
