@@ -53,7 +53,24 @@
         }
         
         #gameContainer {
-            position: relative;
+            <div id="gameContainer">
+    <!-- New moving visuals -->
+    <img id="cloud1" class="cloud" src="cloud.png" alt="Cloud">
+    <img id="cloud2" class="cloud" src="cloud.png" alt="Cloud">
+    <img id="bird1" class="bird" src="bird.png" alt="Bird">
+    <img id="bird2" class="bird" src="bird.png" alt="Bird">
+
+    <!-- Replace basket box with an image -->
+    <img id="basket" src="basket.png" alt="Basket">
+
+    <!-- Your existing game UI stays the same -->
+    <div id="gameHeader">
+        <div id="score">Score: 0</div>
+        <div id="lives"></div>
+    </div>
+    <!-- falling words will be dynamically added by JS -->
+</div>
+position: relative;
             width: 95%;
             max-width: 800px;
             height: 75vh;
@@ -861,6 +878,60 @@
             
             .music-control i {
                 font-size: 20px;
+
+        /* === NEW CLOUDS, BIRDS, BACKGROUND === */
+
+/* Background image */
+#gameContainer {
+    background: url('background.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+/* Basket image */
+#basket {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: auto;
+    z-index: 10;
+}
+
+/* Clouds */
+.cloud {
+    position: absolute;
+    top: 50px;
+    width: 150px;
+    animation: moveCloud 40s linear infinite;
+    opacity: 0.8;
+}
+#cloud2 {
+    top: 120px;
+    animation-duration: 60s;
+}
+@keyframes moveCloud {
+    from { left: -200px; }
+    to { left: 110%; }
+}
+
+/* Birds */
+.bird {
+    position: absolute;
+    top: 200px;
+    width: 80px;
+    animation: flyBird 20s linear infinite;
+    z-index: 5;
+}
+#bird2 {
+    top: 300px;
+    animation-duration: 30s;
+}
+@keyframes flyBird {
+    from { left: -100px; transform: scaleX(1); }
+    to { left: 110%; transform: scaleX(1); }
+}
+
             }
         }
     </style>
@@ -914,7 +985,7 @@
             <button id="startButton">Start Game!</button>
         </div>
         
-        <div id="basket">
+<img id="basket" src="basket.png" alt="Basket">
             <div class="basket-handle"></div>
             <div class="basket-body"></div>
         </div>
