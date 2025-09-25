@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dusun Word Adventure</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
-        
+        /* ===== GLOBAL STYLES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -26,6 +26,7 @@
             padding: 10px;
         }
         
+        /* ===== HEADER STYLES ===== */
         .header {
             text-align: center;
             margin-bottom: 10px;
@@ -52,25 +53,9 @@
             text-shadow: 2px 2px 0 #1976d2;
         }
         
+        /* ===== GAME CONTAINER STYLES ===== */
         #gameContainer {
-            <div id="gameContainer">
-    <!-- New moving visuals -->
-    <img id="cloud1" class="cloud" src="cloud.png" alt="Cloud">
-    <img id="cloud2" class="cloud" src="cloud.png" alt="Cloud">
-    <img id="bird1" class="bird" src="bird.png" alt="Bird">
-    <img id="bird2" class="bird" src="bird.png" alt="Bird">
-
-    <!-- Replace basket box with an image -->
-    <img id="basket" src="basket.png" alt="Basket">
-
-    <!-- Your existing game UI stays the same -->
-    <div id="gameHeader">
-        <div id="score">Score: 0</div>
-        <div id="lives"></div>
-    </div>
-    <!-- falling words will be dynamically added by JS -->
-</div>
-position: relative;
+            position: relative;
             width: 95%;
             max-width: 800px;
             height: 75vh;
@@ -82,6 +67,26 @@ position: relative;
             z-index: 10;
         }
         
+        /* ===== BACKGROUND ELEMENTS ===== */
+        .background-element {
+            position: absolute;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .cloud {
+            width: 150px;
+            opacity: 0.8;
+            animation: moveCloud 40s linear infinite;
+        }
+        
+        .bird {
+            width: 80px;
+            animation: flyBird 20s linear infinite;
+            z-index: 2;
+        }
+        
+        /* ===== GAME UI STYLES ===== */
         #gameHeader {
             background: linear-gradient(to right, #ff5722, #ff9800);
             padding: 12px 25px;
@@ -126,111 +131,20 @@ position: relative;
             animation: pulse 1.5s infinite;
         }
         
-        #instructions {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 25px;
-            text-align: center;
-            z-index: 100;
-            width: 85%;
-            max-width: 500px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border: 5px solid #ff9800;
-            font-family: 'Fredoka One', cursive;
-        }
-        
-        #instructions h2 {
-            color: #ff5722;
-            margin-bottom: 20px;
-            font-size: 32px;
-            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
-        }
-        
-        #instructions p {
-            margin: 15px 0;
-            line-height: 1.6;
-            font-size: 20px;
-            color: #333;
-        }
-        
-        .key {
-            display: inline-block;
-            background: #2196f3;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 10px;
-            margin: 0 5px;
-            box-shadow: 0 4px 0px #1976d2;
-            font-size: 18px;
-        }
-        
-        #startButton {
-            background: linear-gradient(to bottom, #ffeb3b, #ffc107);
-            color: #ff5722;
-            border: none;
-            padding: 15px 30px;
-            font-size: 24px;
-            border-radius: 50px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s;
-            font-weight: bold;
-            box-shadow: 0 6px 0px #ff9800;
-            border: 4px solid #ff9800;
-            font-family: 'Fredoka One', cursive;
-            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
-        }
-        
-        #startButton:hover {
-            transform: translateY(3px);
-            box-shadow: 0 3px 0px #ff9800;
-        }
-        
+        /* ===== BASKET STYLES ===== */
         #basket {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 160px;
-            height: 90px;
+            width: 120px;
+            height: auto;
             z-index: 15;
             transition: transform 0.1s;
             filter: drop-shadow(0 10px 5px rgba(0,0,0,0.3));
         }
         
-        .basket-body {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 70px;
-            background: #8d6e63;
-            border: 5px solid #6d4c41;
-            border-radius: 15px 15px 0 0;
-            background-image: 
-                linear-gradient(90deg, transparent 10%, rgba(255,255,255,0.3) 10%, rgba(255,255,255,0.3) 20%, transparent 20%),
-                linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.3) 40%, transparent 40%),
-                linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.3) 60%, transparent 60%),
-                linear-gradient(90deg, transparent 70%, rgba(255,255,255,0.3) 70%, rgba(255,255,255,0.3) 80%, transparent 80%);
-            box-shadow: 0 10px 0px #5d4037, inset 0 0 15px rgba(0,0,0,0.3);
-        }
-        
-        .basket-handle {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 130px;
-            height: 35px;
-            border: 8px solid #6d4c41;
-            border-bottom: none;
-            border-radius: 65px 65px 0 0;
-            z-index: -1;
-        }
-        
+        /* ===== FALLING ELEMENTS STYLES ===== */
         .word {
             position: absolute;
             font-size: 22px;
@@ -266,13 +180,14 @@ position: relative;
             pointer-events: none;
         }
         
-        #gameOver {
+        /* ===== SCREEN OVERLAYS ===== */
+        #instructions, #gameOver, #winScreen {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(255, 255, 255, 0.95);
-            padding: 35px;
+            padding: 30px;
             border-radius: 25px;
             text-align: center;
             z-index: 100;
@@ -280,25 +195,48 @@ position: relative;
             max-width: 500px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
             border: 5px solid #ff9800;
-            display: none;
             font-family: 'Fredoka One', cursive;
+        }
+        
+        #gameOver, #winScreen {
+            display: none;
+        }
+        
+        #instructions h2, #gameOver h2, #winScreen h2 {
+            color: #ff5722;
+            margin-bottom: 20px;
+            font-size: 32px;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
         }
         
         #gameOver h2 {
             color: #f44336;
-            font-size: 38px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
         }
         
-        #finalScore {
-            font-size: 30px;
-            color: #2196f3;
-            margin: 20px 0;
-            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
+        #winScreen h2 {
+            color: #4caf50;
         }
         
-        #restartButton {
+        #instructions p {
+            margin: 15px 0;
+            line-height: 1.6;
+            font-size: 20px;
+            color: #333;
+        }
+        
+        .key {
+            display: inline-block;
+            background: #2196f3;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 10px;
+            margin: 0 5px;
+            box-shadow: 0 4px 0px #1976d2;
+            font-size: 18px;
+        }
+        
+        /* ===== BUTTON STYLES ===== */
+        #startButton, #restartButton, #playAgainButton {
             background: linear-gradient(to bottom, #ffeb3b, #ffc107);
             color: #ff5722;
             border: none;
@@ -315,11 +253,12 @@ position: relative;
             text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
         }
         
-        #restartButton:hover {
+        #startButton:hover, #restartButton:hover, #playAgainButton:hover {
             transform: translateY(3px);
             box-shadow: 0 3px 0px #ff9800;
         }
         
+        /* ===== GAME INDICATORS ===== */
         #levelIndicator {
             position: absolute;
             top: 90px;
@@ -335,354 +274,46 @@ position: relative;
             border: 3px solid #ffccbc;
         }
         
-        #winScreen {
+        .speed-indicator {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 35px;
-            border-radius: 25px;
-            text-align: center;
-            z-index: 100;
-            width: 85%;
-            max-width: 500px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border: 5px solid #4caf50;
-            display: none;
-            font-family: 'Fredoka One', cursive;
-        }
-        
-        #winScreen h2 {
-            color: #4caf50;
-            font-size: 38px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
-        }
-        
-        #marksCollected {
-            font-size: 30px;
-            color: #2196f3;
-            margin: 20px 0;
-            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
-        }
-        
-        #playAgainButton {
-            background: linear-gradient(to bottom, #ffeb3b, #ffc107);
-            color: #ff5722;
-            border: none;
-            padding: 15px 30px;
-            font-size: 24px;
+            top: 90px;
+            left: 25px;
+            background: linear-gradient(to bottom, #4caf50, #388e3c);
+            color: white;
+            padding: 10px 18px;
             border-radius: 50px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s;
+            font-size: 18px;
             font-weight: bold;
-            box-shadow: 0 6px 0px #ff9800;
-            border: 4px solid #ff9800;
-            font-family: 'Fredoka One', cursive;
-            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
+            box-shadow: 0 4px 0px #2e7d32;
+            z-index: 15;
+            border: 3px solid #c8e6c9;
         }
         
-        #playAgainButton:hover {
-            transform: translateY(3px);
-            box-shadow: 0 3px 0px #ff9800;
-        }
-        
-        .cloud {
+        /* ===== MUSIC CONTROL ===== */
+        .music-control {
             position: absolute;
-            background: white;
-            border-radius: 50px;
-            z-index: 2;
-            animation: floatCloud 40s infinite linear;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            opacity: 0.9;
-        }
-        
-        .cloud::before, .cloud::after {
-            content: '';
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-        }
-        
-        .cloud-1 {
-            width: 140px;
-            height: 70px;
-            top: 15%;
-            left: -150px;
-            animation-duration: 45s;
-        }
-        
-        .cloud-1::before {
-            width: 60px;
-            height: 60px;
-            top: -20px;
-            left: 20px;
-        }
-        
-        .cloud-1::after {
-            width: 80px;
-            height: 80px;
-            top: -30px;
-            right: 20px;
-        }
-        
-        .cloud-2 {
-            width: 170px;
-            height: 80px;
-            top: 30%;
-            right: -180px;
-            animation-duration: 50s;
-        }
-        
-        .cloud-2::before {
-            width: 70px;
-            height: 70px;
-            top: -25px;
+            top: 15px;
             left: 15px;
-        }
-        
-        .cloud-2::after {
-            width: 90px;
-            height: 90px;
-            top: -35px;
-            right: 15px;
-        }
-        
-        .cloud-3 {
-            width: 120px;
-            height: 60px;
-            top: 50%;
-            left: -130px;
-            animation-duration: 55s;
-        }
-        
-        .cloud-3::before {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
             width: 50px;
             height: 50px;
-            top: -15px;
-            left: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 3px solid #ff9800;
+            animation: pulse 2s infinite;
         }
         
-        .cloud-3::after {
-            width: 70px;
-            height: 70px;
-            top: -25px;
-            right: 15px;
+        .music-control i {
+            font-size: 24px;
+            color: #ff5722;
         }
         
-        .sun {
-            position: absolute;
-            top: 25px;
-            left: 35px;
-            width: 90px;
-            height: 90px;
-            background: #ffeb3b;
-            border-radius: 50%;
-            box-shadow: 0 0 40px #ffc107, 0 0 80px #ff9800;
-            z-index: 3;
-            animation: sunRotate 20s infinite linear;
-        }
-        
-        .sun::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
-            background: #ffc107;
-            border-radius: 50%;
-            animation: sunPulse 3s infinite alternate;
-        }
-        
-        .ground {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 40px;
-            background: linear-gradient(to top, #7cb342, #8bc34a);
-            border-top: 5px solid #689f38;
-            z-index: 8;
-        }
-        
-        .bush {
-            position: absolute;
-            bottom: 40px;
-            z-index: 7;
-            animation: bushSway 5s infinite ease-in-out;
-        }
-        
-        .bush-1 {
-            left: 10%;
-            width: 70px;
-            height: 50px;
-            background: #388e3c;
-            border-radius: 50%;
-            box-shadow: 
-                10px 0 0 #2e7d32,
-                -10px 0 0 #2e7d32,
-                0 -10px 0 #2e7d32;
-        }
-        
-        .bush-2 {
-            left: 30%;
-            width: 80px;
-            height: 60px;
-            background: #388e3c;
-            border-radius: 50%;
-            box-shadow: 
-                15px 0 0 #2e7d32,
-                -15px 0 0 #2e7d32,
-                0 -15px 0 #2e7d32;
-        }
-        
-        .bush-3 {
-            right: 20%;
-            width: 70px;
-            height: 50px;
-            background: #388e3c;
-            border-radius: 50%;
-            box-shadow: 
-                10px 0 0 #2e7d32,
-                -10px 0 0 #2e7d32,
-                0 -10px 0 #2e7d32;
-        }
-        
-        .bush-4 {
-            right: 5%;
-            width: 60px;
-            height: 45px;
-            background: #388e3c;
-            border-radius: 50%;
-            box-shadow: 
-                8px 0 0 #2e7d32,
-                -8px 0 0 #2e7d32,
-                0 -8px 0 #2e7d32;
-        }
-        
-        .distraction {
-            position: absolute;
-            z-index: 6;
-            pointer-events: none;
-        }
-        
-        .monster {
-            width: 90px;
-            height: 90px;
-            background: #f44336;
-            border-radius: 50%;
-            position: absolute;
-            animation: monsterFloat 4s infinite ease-in-out;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            border: 4px solid #d32f2f;
-        }
-        
-        .monster::before, .monster::after {
-            content: '';
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            background: white;
-            border-radius: 50%;
-            top: 25px;
-            animation: monsterBlink 3s infinite;
-        }
-        
-        .monster::before {
-            left: 15px;
-        }
-        
-        .monster::after {
-            right: 15px;
-        }
-        
-        .monster-mouth {
-            position: absolute;
-            width: 50px;
-            height: 25px;
-            background: white;
-            border-radius: 0 0 25px 25px;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: monsterTalk 1s infinite alternate;
-        }
-        
-        .rain {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 25px,
-                rgba(255, 255, 255, 0.4) 25px,
-                rgba(255, 255, 255, 0.4) 26px
-            );
-            animation: rainFall 0.4s linear infinite;
-            pointer-events: none;
-            z-index: 9;
-            display: none;
-        }
-        
-        .screen-shake {
-            animation: screenShake 0.5s linear infinite;
-        }
-        
-        .confetti {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: #ff5722;
-            border-radius: 50%;
-            animation: confettiFall 5s linear forwards;
-            z-index: 10;
-        }
-        
-        .bird {
-            position: absolute;
-            width: 40px;
-            height: 30px;
-            z-index: 4;
-            animation: birdFly 15s linear infinite;
-        }
-        
-        .bird::before, .bird::after {
-            content: '';
-            position: absolute;
-            background: #ff9800;
-        }
-        
-        .bird::before {
-            width: 30px;
-            height: 20px;
-            border-radius: 50%;
-            top: 0;
-            left: 0;
-        }
-        
-        .bird::after {
-            width: 15px;
-            height: 10px;
-            border-radius: 50%;
-            top: 5px;
-            right: -5px;
-        }
-        
-        .bird-wing {
-            position: absolute;
-            width: 20px;
-            height: 10px;
-            background: #ff5722;
-            border-radius: 50%;
-            top: 10px;
-            left: 15px;
-            animation: birdFlap 0.5s infinite alternate;
-        }
-        
+        /* ===== ANIMATIONS ===== */
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
@@ -710,113 +341,17 @@ position: relative;
             100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
         }
         
-        @keyframes floatCloud {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(calc(100vw + 300px)); }
+        @keyframes moveCloud {
+            0% { transform: translateX(-200px); }
+            100% { transform: translateX(calc(100vw + 200px)); }
         }
         
-        @keyframes sunRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes flyBird {
+            0% { transform: translateX(-100px) scaleX(1); }
+            100% { transform: translateX(calc(100vw + 100px)) scaleX(1); }
         }
         
-        @keyframes sunPulse {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-        }
-        
-        @keyframes bushSway {
-            0%, 100% { transform: translateX(0) skew(0deg); }
-            50% { transform: translateX(5px) skew(2deg); }
-        }
-        
-        @keyframes monsterFloat {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-15px) rotate(5deg); }
-            75% { transform: translateY(10px) rotate(-5deg); }
-        }
-        
-        @keyframes monsterBlink {
-            0%, 90%, 100% { height: 25px; }
-            95% { height: 5px; }
-        }
-        
-        @keyframes monsterTalk {
-            0% { height: 25px; }
-            100% { height: 15px; }
-        }
-        
-        @keyframes rainFall {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100px; }
-        }
-        
-        @keyframes screenShake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        
-        @keyframes confettiFall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-        
-        @keyframes birdFly {
-            0% { transform: translateX(-100px) translateY(0); }
-            50% { transform: translateX(50vw) translateY(-20px); }
-            100% { transform: translateX(100vw) translateY(0); }
-        }
-        
-        @keyframes birdFlap {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-5px); }
-        }
-        
-        @keyframes heartBeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-        
-        .music-control {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 100;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            border: 3px solid #ff9800;
-            animation: pulse 2s infinite;
-        }
-        
-        .music-control i {
-            font-size: 24px;
-            color: #ff5722;
-        }
-        
-        .speed-indicator {
-            position: absolute;
-            top: 90px;
-            left: 25px;
-            background: linear-gradient(to bottom, #4caf50, #388e3c);
-            color: white;
-            padding: 10px 18px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
-            box-shadow: 0 4px 0px #2e7d32;
-            z-index: 15;
-            border: 3px solid #c8e6c9;
-        }
-        
-        /* Mobile responsiveness */
+        /* ===== MOBILE RESPONSIVENESS ===== */
         @media (max-width: 600px) {
             .header h1 {
                 font-size: 2.2rem;
@@ -842,7 +377,7 @@ position: relative;
             }
             
             #basket {
-                width: 140px;
+                width: 100px;
             }
             
             #score {
@@ -878,82 +413,26 @@ position: relative;
             
             .music-control i {
                 font-size: 20px;
-
-        /* === NEW CLOUDS, BIRDS, BACKGROUND === */
-
-/* Background image */
-#gameContainer {
-    background: url('background.jpg') no-repeat center center;
-    background-size: cover;
-}
-
-/* Basket image */
-#basket {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: auto;
-    z-index: 10;
-}
-
-/* Clouds */
-.cloud {
-    position: absolute;
-    top: 50px;
-    width: 150px;
-    animation: moveCloud 40s linear infinite;
-    opacity: 0.8;
-}
-#cloud2 {
-    top: 120px;
-    animation-duration: 60s;
-}
-@keyframes moveCloud {
-    from { left: -200px; }
-    to { left: 110%; }
-}
-
-/* Birds */
-.bird {
-    position: absolute;
-    top: 200px;
-    width: 80px;
-    animation: flyBird 20s linear infinite;
-    z-index: 5;
-}
-#bird2 {
-    top: 300px;
-    animation-duration: 30s;
-}
-@keyframes flyBird {
-    from { left: -100px; transform: scaleX(1); }
-    to { left: 110%; transform: scaleX(1); }
-}
-
             }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Game Header -->
     <div class="header">
         <h1>Dusun Word Adventure</h1>
         <p>Catch correct translations to earn points!</p>
     </div>
     
+    <!-- Game Container -->
     <div id="gameContainer">
-        <div class="sun"></div>
+        <!-- Background Elements (purely decorative) -->
+        <img class="background-element cloud" src="cloud.png" alt="Cloud" style="top: 50px;">
+        <img class="background-element cloud" src="cloud.png" alt="Cloud" style="top: 120px; animation-duration: 60s;">
+        <img class="background-element bird" src="bird.gif" alt="Bird" style="top: 200px;">
+        <img class="background-element bird" src="bird.gif" alt="Bird" style="top: 300px; animation-duration: 30s;">
         
-        <div class="cloud cloud-1"></div>
-        <div class="cloud cloud-2"></div>
-        <div class="cloud cloud-3"></div>
-        
-        <div class="bird">
-            <div class="bird-wing"></div>
-        </div>
-        
+        <!-- Game UI -->
         <div id="gameHeader">
             <div id="score">Score: 0</div>
             <div id="lives">
@@ -968,13 +447,10 @@ position: relative;
         <div id="levelIndicator">Level: 1</div>
         <div class="speed-indicator">Speed: Normal</div>
         
-        <div class="bush bush-1"></div>
-        <div class="bush bush-2"></div>
-        <div class="bush bush-3"></div>
-        <div class="bush bush-4"></div>
+        <!-- Basket -->
+        <img id="basket" src="basket.png" alt="Basket">
         
-        <div class="ground"></div>
-        
+        <!-- Game Screens -->
         <div id="instructions">
             <h2>How to Play</h2>
             <p>Use <span class="key">←</span> and <span class="key">→</span> to move the basket</p>
@@ -983,11 +459,6 @@ position: relative;
             <p>Catch <span style="color:#f44336">❤️ hearts</span> for extra lives!</p>
             <p>Reach Level 5 to win!</p>
             <button id="startButton">Start Game!</button>
-        </div>
-        
-<img id="basket" src="basket.png" alt="Basket">
-            <div class="basket-handle"></div>
-            <div class="basket-body"></div>
         </div>
         
         <div id="gameOver">
@@ -1004,16 +475,15 @@ position: relative;
             <button id="playAgainButton">Play Again!</button>
         </div>
         
-        <div class="rain" id="rainEffect"></div>
-        
+        <!-- Music Control -->
         <div class="music-control" id="musicToggle">
             <i class="fas fa-volume-up"></i>
         </div>
     </div>
 
-    <!-- Sounds -->
+    <!-- Audio Elements -->
     <audio id="correctSound" src="correct.mp3"></audio>
-    <audio id="wrongSound" src="wrong.mp3"></audio>
+    <audio id="wrongSound" src="https://wrong.mp3"></audio>
     <audio id="gameOverSound" src="https://assets.mixkit.co/sfx/preview/mixkit-sad-game-over-trombone-471.mp3"></audio>
     <audio id="levelUpSound" src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3"></audio>
     <audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
@@ -1023,8 +493,9 @@ position: relative;
     <audio id="backgroundMusic" loop src="bgm.mp3"></audio>
 
     <script>
-        // Word Data
+        // ===== GAME DATA =====
         const words = [
+            // Correct words
             {en:"Rambutan", du:"Rangalau", correct:true},
             {en:"House", du:"Walai", correct:true},
             {en:"Cat", du:"Tungau", correct:true},
@@ -1035,18 +506,8 @@ position: relative;
             {en:"Water", du:"Waig", correct:true},
             {en:"Beautiful", du:"Olumis", correct:true},
             {en:"White", du:"Opurak", correct:true},
-            {en:"Mouth", du:"Kabang", correct:true},
-            {en:"Red", du:"Aragang", correct:true},
-            {en:"Angry", du:"Otogod", correct:true},
-            {en:"Book", du:"Buuk", correct:true},
-            {en:"School", du:"Sikul", correct:true},
-            {en:"Friend", du:"Tambalut", correct:true},
-            {en:"Food", du:"Takanon", correct:true},
-            {en:"Rice", du:"Takano", correct:true},
-            {en:"Fish", du:"Sada", correct:true},
-            {en:"Elder", du:"Molohing", correct:true},
-
-            // Incorrect words to confuse
+            
+            // Incorrect words
             {en:"Car", du:"Motuka", correct:false},
             {en:"Phone", du:"Telefon", correct:false},
             {en:"Sky", du:"Langit", correct:false},
@@ -1059,7 +520,7 @@ position: relative;
             {en:"Sun", du:"Matahari", correct:false}
         ];
 
-        // Game elements
+        // ===== GAME ELEMENTS =====
         const container = document.getElementById("gameContainer");
         const basket = document.getElementById("basket");
         const scoreDisplay = document.getElementById("score");
@@ -1074,11 +535,10 @@ position: relative;
         const playAgainButton = document.getElementById("playAgainButton");
         const levelIndicator = document.getElementById("levelIndicator");
         const speedIndicator = document.querySelector(".speed-indicator");
-        const rainEffect = document.getElementById("rainEffect");
         const musicToggle = document.getElementById("musicToggle");
         const musicIcon = musicToggle.querySelector("i");
         
-        // Sounds
+        // ===== AUDIO ELEMENTS =====
         const correctSound = document.getElementById("correctSound");
         const wrongSound = document.getElementById("wrongSound");
         const gameOverSound = document.getElementById("gameOverSound");
@@ -1089,10 +549,10 @@ position: relative;
         const heartSound = document.getElementById("heartSound");
         const backgroundMusic = document.getElementById("backgroundMusic");
 
-        // Game variables
+        // ===== GAME VARIABLES =====
         let score = 0;
         let lives = 5;
-        let basketX = container.offsetWidth / 2 - 80;
+        let basketX = container.offsetWidth / 2 - 60; // Half of basket width (120px/2)
         let gameActive = false;
         let wordInterval;
         let heartInterval;
@@ -1100,12 +560,12 @@ position: relative;
         let baseFallSpeed = 3;
         let level = 1;
         let wordsCaught = 0;
-        const levelThreshold = 10; // Words needed to level up
+        const levelThreshold = 10;
         let musicOn = true;
         let distractionsActive = false;
-        let activeWords = []; // Track positions of active words
+        let activeWords = [];
 
-        // Initialize audio elements
+        // ===== INITIALIZATION =====
         function initializeAudio() {
             // Set volume levels
             correctSound.volume = 0.7;
@@ -1130,7 +590,64 @@ position: relative;
             backgroundMusic.load();
         }
 
-        // Create catch effect
+        // ===== GAME FUNCTIONS =====
+        function startGame() {
+            // Reset game state
+            score = 0;
+            lives = 5;
+            level = 1;
+            wordsCaught = 0;
+            baseFallSpeed = 3;
+            distractionsActive = false;
+            activeWords = [];
+            
+            // Clear intervals
+            clearInterval(wordInterval);
+            clearInterval(heartInterval);
+            clearInterval(distractionInterval);
+            
+            // Clear existing elements
+            document.querySelectorAll(".word, .heart, .catch-effect, .distraction").forEach(el => el.remove());
+            
+            // Update UI
+            scoreDisplay.textContent = "Score: " + score;
+            updateLives();
+            levelIndicator.textContent = "Level: " + level;
+            speedIndicator.textContent = "Speed: Normal";
+            
+            // Hide/show screens
+            instructions.style.display = "none";
+            gameOverScreen.style.display = "none";
+            winScreen.style.display = "none";
+            
+            // Position basket
+            basketX = container.offsetWidth / 2 - 60;
+            basket.style.left = basketX + "px";
+            
+            // Start game
+            gameActive = true;
+            
+            // Start background music
+            if (musicOn) {
+                backgroundMusic.currentTime = 0;
+                backgroundMusic.play().catch(e => console.log("Audio play failed:", e));
+            }
+            
+            // Start game loops
+            wordInterval = setInterval(dropWord, 1500);
+            heartInterval = setInterval(dropHeart, 8000);
+        }
+
+        function updateLives() {
+            livesDisplay.innerHTML = '';
+            for (let i = 0; i < lives; i++) {
+                const life = document.createElement("div");
+                life.className = "life";
+                life.innerHTML = "❤️";
+                livesDisplay.appendChild(life);
+            }
+        }
+
         function createCatchEffect(text, color, x, y) {
             const effect = document.createElement("div");
             effect.className = "catch-effect";
@@ -1142,36 +659,304 @@ position: relative;
             
             container.appendChild(effect);
             
-            // Remove effect after animation
-            setTimeout(() => {
-                effect.remove();
-            }, 1000);
+            setTimeout(() => effect.remove(), 1000);
         }
 
-        // Move Basket with Arrow Keys
+        function isPositionValid(newX, minDistance) {
+            for (let word of activeWords) {
+                if (Math.abs(word.x - newX) < minDistance) return false;
+            }
+            return true;
+        }
+
+        function dropWord() {
+            if (!gameActive) return;
+            
+            const w = words[Math.floor(Math.random() * words.length)];
+            const el = document.createElement("div");
+            el.className = "word";
+            el.textContent = `${w.en} - ${w.du}`;
+            el.dataset.correct = w.correct;
+            
+            // Find valid position
+            const maxLeft = container.offsetWidth - 150;
+            let newX;
+            let attempts = 0;
+            const minDistance = 150;
+            
+            do {
+                newX = Math.random() * maxLeft;
+                attempts++;
+            } while (!isPositionValid(newX, minDistance) && attempts < 10);
+            
+            el.style.left = newX + "px";
+            el.style.top = "-50px";
+            container.appendChild(el);
+            
+            // Track word
+            activeWords.push({ x: newX, element: el });
+
+            let y = -50;
+            const fallSpeed = baseFallSpeed + (level - 1) * 0.8;
+            
+            const fall = setInterval(() => {
+                if (!gameActive) {
+                    clearInterval(fall);
+                    return;
+                }
+                
+                y += fallSpeed / 2;
+                el.style.top = y + "px";
+
+                // Collision detection
+                const basketRect = basket.getBoundingClientRect();
+                const wordRect = el.getBoundingClientRect();
+                
+                const catchZoneTop = basketRect.top;
+                const catchZoneBottom = basketRect.top + (basketRect.height * 0.4);
+                
+                if (wordRect.bottom >= catchZoneTop && 
+                    wordRect.top <= catchZoneBottom &&
+                    wordRect.left < basketRect.right &&
+                    wordRect.right > basketRect.left) {
+                    
+                    el.style.transform = "scale(1.2)";
+                    
+                    setTimeout(() => {
+                        const effectX = basketRect.left + (basketRect.width / 2);
+                        const effectY = basketRect.top - 30;
+                        
+                        if (el.dataset.correct === "true") {
+                            score += 5;
+                            createCatchEffect("+5", "#4caf50", effectX, effectY);
+                            correctSound.currentTime = 0;
+                            correctSound.play().catch(e => console.log("Audio play failed:", e));
+                            wordsCaught++;
+                            
+                            if (wordsCaught >= levelThreshold) levelUp();
+                        } else {
+                            score -= 3;
+                            lives--;
+                            createCatchEffect("-3", "#f44336", effectX, effectY);
+                            updateLives();
+                            wrongSound.currentTime = 0;
+                            wrongSound.play().catch(e => console.log("Audio play failed:", e));
+                            
+                            if (lives <= 0) gameOver();
+                        }
+                        
+                        scoreDisplay.textContent = "Score: " + score;
+                        
+                        // Remove from active words
+                        const index = activeWords.findIndex(w => w.element === el);
+                        if (index !== -1) activeWords.splice(index, 1);
+                        
+                        el.remove();
+                    }, 100);
+                    
+                    clearInterval(fall);
+                }
+
+                // Remove if missed
+                if (y > container.offsetHeight) {
+                    if (el.dataset.correct === "true") {
+                        lives--;
+                        updateLives();
+                        if (lives <= 0) gameOver();
+                    }
+                    
+                    const index = activeWords.findIndex(w => w.element === el);
+                    if (index !== -1) activeWords.splice(index, 1);
+                    
+                    el.remove();
+                    clearInterval(fall);
+                }
+            }, 30);
+        }
+
+        function dropHeart() {
+            if (!gameActive || lives >= 10) return;
+            
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerHTML = "❤️";
+            heart.style.animation = "heartBeat 1s infinite, heartFloat 3s infinite";
+            
+            const maxLeft = container.offsetWidth - 50;
+            heart.style.left = Math.random() * maxLeft + "px";
+            heart.style.top = "-50px";
+            container.appendChild(heart);
+
+            let y = -50;
+            const fallSpeed = 2;
+            
+            const fall = setInterval(() => {
+                if (!gameActive) {
+                    clearInterval(fall);
+                    return;
+                }
+                
+                y += fallSpeed;
+                heart.style.top = y + "px";
+
+                const basketRect = basket.getBoundingClientRect();
+                const heartRect = heart.getBoundingClientRect();
+                
+                if (heartRect.bottom >= basketRect.top && 
+                    heartRect.top <= basketRect.bottom &&
+                    heartRect.left < basketRect.right &&
+                    heartRect.right > basketRect.left) {
+                    
+                    heart.style.transform = "scale(1.5)";
+                    
+                    const effectX = basketRect.left + (basketRect.width / 2);
+                    const effectY = basketRect.top - 30;
+                    createCatchEffect("+1 Life", "#ff4081", effectX, effectY);
+                    
+                    setTimeout(() => {
+                        lives++;
+                        if (lives > 10) lives = 10;
+                        updateLives();
+                        heartSound.currentTime = 0;
+                        heartSound.play().catch(e => console.log("Audio play failed:", e));
+                        heart.remove();
+                    }, 100);
+                    
+                    clearInterval(fall);
+                }
+
+                if (y > container.offsetHeight) {
+                    heart.remove();
+                    clearInterval(fall);
+                }
+            }, 30);
+        }
+
+        function levelUp() {
+            level++;
+            wordsCaught = 0;
+            levelIndicator.textContent = "Level: " + level;
+            levelUpSound.currentTime = 0;
+            levelUpSound.play().catch(e => console.log("Audio play failed:", e));
+            
+            if (level <= 3) speedIndicator.textContent = "Speed: Normal";
+            else if (level <= 6) speedIndicator.textContent = "Speed: Fast";
+            else speedIndicator.textContent = "Speed: Very Fast!";
+            
+            if (level >= 3 && !distractionsActive) startDistractions();
+            if (level >= 5) winGame();
+            
+            container.style.boxShadow = "0 0 40px #ffeb3b";
+            setTimeout(() => container.style.boxShadow = "0 15px 35px rgba(0, 0, 0, 0.3)", 1000);
+        }
+
+        function startDistractions() {
+            clearInterval(distractionInterval);
+            let distractionFrequency = Math.max(1000, 4000 - (level * 500));
+            
+            distractionInterval = setInterval(() => {
+                if (!gameActive) return;
+                
+                if (level === 3) createMonster();
+                else if (level === 4) Math.random() > 0.5 ? createMonster() : createRain();
+            }, distractionFrequency);
+            
+            distractionsActive = true;
+        }
+
+        function createMonster() {
+            const monster = document.createElement("div");
+            monster.className = "distraction monster";
+            monster.innerHTML = '<div class="monster-mouth"></div>';
+            
+            monster.style.left = Math.random() * (container.offsetWidth - 90) + "px";
+            monster.style.top = "-90px";
+            container.appendChild(monster);
+            
+            let y = -90;
+            const monsterFall = setInterval(() => {
+                if (!gameActive) {
+                    clearInterval(monsterFall);
+                    return;
+                }
+                
+                y += 4;
+                monster.style.top = y + "px";
+                
+                if (y > container.offsetHeight) {
+                    monster.remove();
+                    clearInterval(monsterFall);
+                }
+            }, 50);
+            
+            monsterSound.currentTime = 0;
+            monsterSound.play().catch(e => console.log("Audio play failed:", e));
+        }
+
+        function createRain() {
+            const rain = document.createElement("div");
+            rain.className = "rain";
+            rain.style.display = "block";
+            container.appendChild(rain);
+            
+            rainSound.currentTime = 0;
+            rainSound.play().catch(e => console.log("Audio play failed:", e));
+            container.classList.add("screen-shake");
+            
+            setTimeout(() => {
+                rain.remove();
+                rainSound.pause();
+                container.classList.remove("screen-shake");
+            }, 3000);
+        }
+
+        function winGame() {
+            gameActive = false;
+            clearInterval(wordInterval);
+            clearInterval(heartInterval);
+            clearInterval(distractionInterval);
+            backgroundMusic.pause();
+            winSound.currentTime = 0;
+            winSound.play().catch(e => console.log("Audio play failed:", e));
+            
+            marksCollectedDisplay.textContent = "Marks Collected: " + score;
+            winScreen.style.display = "block";
+        }
+
+        function gameOver() {
+            gameActive = false;
+            clearInterval(wordInterval);
+            clearInterval(heartInterval);
+            clearInterval(distractionInterval);
+            backgroundMusic.pause();
+            gameOverSound.currentTime = 0;
+            gameOverSound.play().catch(e => console.log("Audio play failed:", e));
+            
+            finalScoreDisplay.textContent = "Final Score: " + score;
+            gameOverScreen.style.display = "block";
+        }
+
+        // ===== EVENT LISTENERS =====
         document.addEventListener("keydown", e => {
             if (!gameActive) return;
             
             if (e.key === "ArrowLeft") basketX -= 40;
             if (e.key === "ArrowRight") basketX += 40;
             
-            // Keep basket within bounds - fixed boundary calculation
-            const basketWidth = 160;
-            if (basketX < 10) basketX = 10;
-            if (basketX > container.offsetWidth - basketWidth - 10) {
-                basketX = container.offsetWidth - basketWidth - 10;
+            // Fixed boundary calculation
+            const basketWidth = 120;
+            const containerPadding = 10;
+            if (basketX < containerPadding) basketX = containerPadding;
+            if (basketX > container.offsetWidth - basketWidth - containerPadding) {
+                basketX = container.offsetWidth - basketWidth - containerPadding;
             }
             
             basket.style.left = basketX + "px";
-            
-            // Add bounce animation
-            basket.style.transform = `translateX(-50%) scale(1.05)`;
-            setTimeout(() => {
-                basket.style.transform = `translateX(-50%) scale(1)`;
-            }, 100);
+            basket.style.transform = `translateX(0) scale(1.05)`;
+            setTimeout(() => basket.style.transform = `translateX(0) scale(1)`, 100);
         });
 
-        // Touch support for mobile devices
+        // Touch support
         let touchStartX = 0;
         let basketStartX = 0;
         
@@ -1188,18 +973,17 @@ position: relative;
             const diff = touchX - touchStartX;
             basketX = basketStartX + diff;
             
-            // Keep basket within bounds - fixed boundary calculation
-            const basketWidth = 160;
-            if (basketX < 10) basketX = 10;
-            if (basketX > container.offsetWidth - basketWidth - 10) {
-                basketX = container.offsetWidth - basketWidth - 10;
+            const basketWidth = 120;
+            const containerPadding = 10;
+            if (basketX < containerPadding) basketX = containerPadding;
+            if (basketX > container.offsetWidth - basketWidth - containerPadding) {
+                basketX = container.offsetWidth - basketWidth - containerPadding;
             }
             
             basket.style.left = basketX + "px";
             e.preventDefault();
         }, {passive: false});
 
-        // Music toggle
         musicToggle.addEventListener("click", function() {
             if (musicOn) {
                 backgroundMusic.pause();
@@ -1212,478 +996,11 @@ position: relative;
             }
         });
 
-        // Start game
         startButton.addEventListener("click", startGame);
         restartButton.addEventListener("click", startGame);
         playAgainButton.addEventListener("click", startGame);
 
-        function startGame() {
-            // Reset game state
-            score = 0;
-            lives = 5;
-            level = 1;
-            wordsCaught = 0;
-            baseFallSpeed = 3;
-            distractionsActive = false;
-            activeWords = [];
-            
-            // Clear distractions
-            clearInterval(distractionInterval);
-            clearInterval(heartInterval);
-            const existingDistractions = document.querySelectorAll(".distraction, .heart, .catch-effect");
-            existingDistractions.forEach(d => d.remove());
-            rainEffect.style.display = "none";
-            rainSound.pause();
-            container.classList.remove("screen-shake");
-            
-            // Update UI
-            scoreDisplay.textContent = "Score: " + score;
-            updateLives();
-            levelIndicator.textContent = "Level: " + level;
-            speedIndicator.textContent = "Speed: Normal";
-            
-            // Hide instructions and game over screen
-            instructions.style.display = "none";
-            gameOverScreen.style.display = "none";
-            winScreen.style.display = "none";
-            
-            // Clear any existing words
-            const existingWords = document.querySelectorAll(".word");
-            existingWords.forEach(word => word.remove());
-            
-            // Position basket
-            basketX = container.offsetWidth / 2 - 80;
-            basket.style.left = basketX + "px";
-            
-            // Start game
-            gameActive = true;
-            
-            // Start background music
-            if (musicOn) {
-                backgroundMusic.currentTime = 0;
-                backgroundMusic.play().catch(e => console.log("Audio play failed:", e));
-            }
-            
-            // Start dropping words
-            if (wordInterval) clearInterval(wordInterval);
-            wordInterval = setInterval(dropWord, 1500);
-            
-            // Start dropping hearts
-            if (heartInterval) clearInterval(heartInterval);
-            heartInterval = setInterval(dropHeart, 8000); // Drop a heart every 8 seconds
-            
-            // Create a flying bird
-            createBird();
-        }
-
-        // Check if a position is too close to existing words
-        function isPositionValid(newX, minDistance) {
-            for (let word of activeWords) {
-                if (Math.abs(word.x - newX) < minDistance) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        // Drop Words
-        function dropWord() {
-            if (!gameActive) return;
-            
-            const w = words[Math.floor(Math.random() * words.length)];
-            const el = document.createElement("div");
-            el.className = "word";
-            el.textContent = `${w.en} - ${w.du}`;
-            el.dataset.correct = w.correct;
-            
-            // Find a position that's not too close to other words
-            const maxLeft = container.offsetWidth - 150;
-            let newX;
-            let attempts = 0;
-            const minDistance = 150; // Minimum distance between words
-            
-            do {
-                newX = Math.random() * maxLeft;
-                attempts++;
-            } while (!isPositionValid(newX, minDistance) && attempts < 10);
-            
-            el.style.left = newX + "px";
-            el.style.top = "-50px";
-            
-            container.appendChild(el);
-            
-            // Track this word's position
-            const wordData = { x: newX, element: el };
-            activeWords.push(wordData);
-
-            let y = -50;
-            const fallSpeed = baseFallSpeed + (level - 1) * 0.8; // Increase speed with level
-            
-            const fall = setInterval(() => {
-                if (!gameActive) {
-                    clearInterval(fall);
-                    return;
-                }
-                
-                y += fallSpeed / 2;
-                el.style.top = y + "px";
-
-                // Get basket position
-                const basketRect = basket.getBoundingClientRect();
-                const wordRect = el.getBoundingClientRect();
-                
-                // Calculate the top of the basket (not the entire basket)
-                const basketTop = basketRect.top;
-                const basketHeight = basketRect.height;
-                
-                // Only count as caught if the word touches the top 40% of the basket (easier)
-                const catchZoneTop = basketTop;
-                const catchZoneBottom = basketTop + (basketHeight * 0.4);
-                
-                // Check if word is within the catch zone
-                if (wordRect.bottom >= catchZoneTop && 
-                    wordRect.top <= catchZoneBottom &&
-                    wordRect.left < basketRect.right &&
-                    wordRect.right > basketRect.left) {
-                    
-                    // Animate word being caught
-                    el.style.transform = "scale(1.2)";
-                    
-                    // Create catch effect
-                    const effectX = basketRect.left + (basketRect.width / 2);
-                    const effectY = basketRect.top - 30;
-                    
-                    setTimeout(() => {
-                        if (el.dataset.correct === "true") {
-                            score += 5;
-                            createCatchEffect("+5", "#4caf50", effectX, effectY);
-                            correctSound.currentTime = 0;
-                            correctSound.play().catch(e => console.log("Audio play failed:", e));
-                            wordsCaught++;
-                            
-                            // Check for level up
-                            if (wordsCaught >= levelThreshold) {
-                                levelUp();
-                            }
-                        } else {
-                            score -= 3;
-                            lives--;
-                            createCatchEffect("-3", "#f44336", effectX, effectY);
-                            updateLives();
-                            wrongSound.currentTime = 0;
-                            wrongSound.play().catch(e => console.log("Audio play failed:", e));
-                            
-                            // Check for game over
-                            if (lives <= 0) {
-                                gameOver();
-                            }
-                        }
-                        
-                        scoreDisplay.textContent = "Score: " + score;
-                        
-                        // Remove from active words
-                        const index = activeWords.findIndex(w => w.element === el);
-                        if (index !== -1) {
-                            activeWords.splice(index, 1);
-                        }
-                        
-                        el.remove();
-                    }, 100);
-                    
-                    clearInterval(fall);
-                }
-
-                // Remove if missed (hit the ground)
-                if (y > container.offsetHeight) {
-                    if (el.dataset.correct === "true") {
-                        // Lose a life for missing a correct word
-                        lives--;
-                        updateLives();
-                        
-                        if (lives <= 0) {
-                            gameOver();
-                        }
-                    }
-                    
-                    // Remove from active words
-                    const index = activeWords.findIndex(w => w.element === el);
-                    if (index !== -1) {
-                        activeWords.splice(index, 1);
-                    }
-                    
-                    el.remove();
-                    clearInterval(fall);
-                }
-            }, 30);
-        }
-
-        // Drop Hearts
-        function dropHeart() {
-            if (!gameActive || lives >= 10) return; // Don't drop hearts if player has max lives
-            
-            const heart = document.createElement("div");
-            heart.className = "heart";
-            heart.innerHTML = "❤️";
-            heart.style.animation = "heartBeat 1s infinite, heartFloat 3s infinite";
-            
-            // Random horizontal position
-            const maxLeft = container.offsetWidth - 50;
-            heart.style.left = Math.random() * maxLeft + "px";
-            heart.style.top = "-50px";
-            
-            container.appendChild(heart);
-
-            let y = -50;
-            const fallSpeed = 2; // Hearts fall slower than words
-            
-            const fall = setInterval(() => {
-                if (!gameActive) {
-                    clearInterval(fall);
-                    return;
-                }
-                
-                y += fallSpeed;
-                heart.style.top = y + "px";
-
-                // Get basket position
-                const basketRect = basket.getBoundingClientRect();
-                const heartRect = heart.getBoundingClientRect();
-                
-                // Check if heart is caught
-                if (heartRect.bottom >= basketRect.top && 
-                    heartRect.top <= basketRect.bottom &&
-                    heartRect.left < basketRect.right &&
-                    heartRect.right > basketRect.left) {
-                    
-                    // Animate heart being caught
-                    heart.style.transform = "scale(1.5)";
-                    
-                    // Create catch effect for heart
-                    const effectX = basketRect.left + (basketRect.width / 2);
-                    const effectY = basketRect.top - 30;
-                    createCatchEffect("+1 Life", "#ff4081", effectX, effectY);
-                    
-                    setTimeout(() => {
-                        lives++;
-                        if (lives > 10) lives = 10; // Cap at 10 lives
-                        updateLives();
-                        heartSound.currentTime = 0;
-                        heartSound.play().catch(e => console.log("Audio play failed:", e));
-                        heart.remove();
-                    }, 100);
-                    
-                    clearInterval(fall);
-                }
-
-                // Remove if missed (hit the ground)
-                if (y > container.offsetHeight) {
-                    heart.remove();
-                    clearInterval(fall);
-                }
-            }, 30);
-        }
-
-        function updateLives() {
-            livesDisplay.innerHTML = '';
-            for (let i = 0; i < lives; i++) {
-                const life = document.createElement("div");
-                life.className = "life";
-                life.innerHTML = "❤️";
-                livesDisplay.appendChild(life);
-            }
-        }
-
-        function createBird() {
-            const bird = document.createElement("div");
-            bird.className = "bird";
-            
-            const wing = document.createElement("div");
-            wing.className = "bird-wing";
-            bird.appendChild(wing);
-            
-            // Random vertical position
-            const topPos = Math.random() * 50 + 10;
-            bird.style.top = topPos + "%";
-            
-            container.appendChild(bird);
-            
-            // Remove bird after animation completes
-            setTimeout(() => {
-                if (bird.parentNode) {
-                    bird.remove();
-                }
-            }, 15000);
-        }
-
-        function levelUp() {
-            level++;
-            wordsCaught = 0;
-            levelIndicator.textContent = "Level: " + level;
-            levelUpSound.currentTime = 0;
-            levelUpSound.play().catch(e => console.log("Audio play failed:", e));
-            
-            // Update speed indicator based on level
-            if (level <= 3) {
-                speedIndicator.textContent = "Speed: Normal";
-            } else if (level <= 6) {
-                speedIndicator.textContent = "Speed: Fast";
-            } else {
-                speedIndicator.textContent = "Speed: Very Fast!";
-            }
-            
-            // Start distractions at level 3
-            if (level >= 3 && !distractionsActive) {
-                startDistractions();
-                distractionsActive = true;
-            }
-            
-            // Check for win condition at level 5
-            if (level >= 5) {
-                winGame();
-                return;
-            }
-            
-            // Visual feedback for level up
-            container.style.boxShadow = "0 0 40px #ffeb3b";
-            setTimeout(() => {
-                container.style.boxShadow = "0 15px 35px rgba(0, 0, 0, 0.3)";
-            }, 1000);
-            
-            // Create a new bird
-            createBird();
-        }
-
-        function startDistractions() {
-            // Clear any existing distraction interval
-            clearInterval(distractionInterval);
-            
-            // Set up distraction interval based on level
-            let distractionFrequency = 4000 - (level * 500); // More frequent as level increases
-            if (distractionFrequency < 1000) distractionFrequency = 1000;
-            
-            distractionInterval = setInterval(() => {
-                if (!gameActive) return;
-                
-                // Different distractions based on level
-                if (level === 3) {
-                    createMonster();
-                } else if (level === 4) {
-                    // 50% chance of monster, 50% chance of rain
-                    if (Math.random() > 0.5) {
-                        createMonster();
-                    } else {
-                        createRain();
-                    }
-                }
-            }, distractionFrequency);
-        }
-
-        function createMonster() {
-            const monster = document.createElement("div");
-            monster.className = "distraction monster";
-            
-            // Create monster face
-            const mouth = document.createElement("div");
-            mouth.className = "monster-mouth";
-            monster.appendChild(mouth);
-            
-            // Position monster randomly at the top
-            monster.style.left = Math.random() * (container.offsetWidth - 90) + "px";
-            monster.style.top = "-90px";
-            
-            container.appendChild(monster);
-            
-            // Animate monster falling
-            let y = -90;
-            const monsterFall = setInterval(() => {
-                if (!gameActive) {
-                    clearInterval(monsterFall);
-                    return;
-                }
-                
-                y += 4;
-                monster.style.top = y + "px";
-                
-                // Remove if off screen
-                if (y > container.offsetHeight) {
-                    monster.remove();
-                    clearInterval(monsterFall);
-                }
-            }, 50);
-            
-            // Play monster sound
-            monsterSound.currentTime = 0;
-            monsterSound.play().catch(e => console.log("Audio play failed:", e));
-        }
-
-        function createRain() {
-            // Show rain effect
-            rainEffect.style.display = "block";
-            rainSound.currentTime = 0;
-            rainSound.play().catch(e => console.log("Audio play failed:", e));
-            
-            // Screen shake effect
-            container.classList.add("screen-shake");
-            
-            // Hide rain after 3 seconds
-            setTimeout(() => {
-                rainEffect.style.display = "none";
-                rainSound.pause();
-                container.classList.remove("screen-shake");
-            }, 3000);
-        }
-
-        function winGame() {
-            gameActive = false;
-            clearInterval(wordInterval);
-            clearInterval(heartInterval);
-            clearInterval(distractionInterval);
-            backgroundMusic.pause();
-            winSound.currentTime = 0;
-            winSound.play().catch(e => console.log("Audio play failed:", e));
-            
-            // Create confetti
-            createConfetti();
-            
-            marksCollectedDisplay.textContent = "Marks Collected: " + score;
-            winScreen.style.display = "block";
-        }
-
-        function createConfetti() {
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement("div");
-                confetti.className = "confetti";
-                confetti.style.left = Math.random() * 100 + "%";
-                confetti.style.backgroundColor = getRandomColor();
-                confetti.style.animationDelay = Math.random() * 5 + "s";
-                container.appendChild(confetti);
-                
-                // Remove confetti after animation
-                setTimeout(() => {
-                    confetti.remove();
-                }, 5000);
-            }
-        }
-
-        function getRandomColor() {
-            const colors = ["#ff5722", "#2196f3", "#ffeb3b", "#4caf50", "#9c27b0"];
-            return colors[Math.floor(Math.random() * colors.length)];
-        }
-
-        function gameOver() {
-            gameActive = false;
-            clearInterval(wordInterval);
-            clearInterval(heartInterval);
-            clearInterval(distractionInterval);
-            backgroundMusic.pause();
-            gameOverSound.currentTime = 0;
-            gameOverSound.play().catch(e => console.log("Audio play failed:", e));
-            
-            finalScoreDisplay.textContent = "Final Score: " + score;
-            gameOverScreen.style.display = "block";
-        }
-
-        // Initialize the game when page loads
+        // Initialize game
         window.addEventListener('load', function() {
             initializeAudio();
         });
